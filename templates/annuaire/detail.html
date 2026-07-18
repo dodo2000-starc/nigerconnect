@@ -1,0 +1,141 @@
+{% extends "base.html" %}
+{% block title %}{{ entreprise.nom }}{% endblock %}
+{% block content %}
+<div class="row g-4">
+    <div class="col-lg-8">
+        <div class="card p-4">
+            <div class="d-flex justify-content-between align-items-start mb-3">
+                <div>
+                    <span class="badge-nc-green mb-2 d-inline-block">{{ entreprise.categorie }}</span>
+                    <h3 class="fw-bold mb-1">{{ entreprise.nom }}</h3>
+                    {% if entreprise.est_verifie %}
+                    <span class="text-success small"><i class="fas fa-check-circle"></i> Vérifié</span>
+                    {% endif %}
+                </div>
+                {% if entreprise.est_premium %}
+                <span class="badge bg-warning text-dark">⭐ Premium</span>
+                {% endif %}
+            </div>
+
+            {% if entreprise.description %}
+            <p class="text-muted mb-4">{{ entreprise.description }}</p>
+            {% endif %}
+
+            <div class="row g-3 mb-4">
+                {% if entreprise.adresse or entreprise.quartier %}
+                <div class="col-md-6">
+                    <div class="d-flex gap-2">
+                        <i class="fas fa-map-marker-alt text-danger mt-1"></i>
+                        <div>
+                            <div class="fw-semibold small">Adresse</div>
+                            <div class="text-muted small">
+                                {{ entreprise.adresse or '' }}
+                                {% if entreprise.quartier %}, {{ entreprise.quartier }}{% endif %}
+                                - {{ entreprise.ville }}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {% endif %}
+                {% if entreprise.telephone %}
+                <div class="col-md-6">
+                    <div class="d-flex gap-2">
+                        <i class="fas fa-phone text-success mt-1"></i>
+                        <div>
+                            <div class="fw-semibold small">Téléphone</div>
+                            <div class="text-muted small">{{ entreprise.telephone }}</div>
+                        </div>
+                    </div>
+                </div>
+                {% endif %}
+                {% if entreprise.horaires %}
+                <div class="col-md-6">
+                    <div class="d-flex gap-2">
+                        <i class="fas fa-clock text-primary mt-1"></i>
+                        <div>
+                            <div class="fw-semibold small">Horaires</div>
+                            <div class="text-muted small">{{ entreprise.horaires }}</div>
+                        </div>
+                    </div>
+                </div>
+                {% endif %}
+                {% if entreprise.email %}
+                <div class="col-md-6">
+                    <div class="d-flex gap-2">
+                        <i class="fas fa-envelope text-warning mt-1"></i>
+                        <div>
+                            <div class="fw-semibold small">Email</div>
+                            <div class="text-muted small">{{ entreprise.email }}</div>
+                        </div>
+                    </div>
+                </div>
+                {% endif %}
+            </div>
+
+            <!-- Avis -->
+            <h5 class="fw-bold mb-3">Avis clients ({{ avis|length }})</h5>
+            {% for a in avis %}
+            <div class="border-bottom pb-3 mb-3">
+                <div class="d-flex justify-content-between">
+                    <div class="text-warning">
+                        {% for i in range(a.note) %}<i class="fas fa-star"></i>{% endfor %}
+                        {% for i in range(5 - a.note) %}<i class="far fa-star"></i>{% endfor %}
+                    </div>
+                    <small class="text-muted">{{ a.date_creation|temps_ecoule }}</small>
+                </div>
+                {% if a.commentaire %}
+                <p class="small text-muted mb-0 mt-1">{{ a.commentaire }}</p>
+                {% endif %}
+            </div>
+            {% else %}
+            <p class="text-muted small">Aucun avis pour le moment.</p>
+            {% endfor %}
+
+            {% if current_user.is_authenticated %}
+            <div class="mt-3">
+                <h6 class="fw-semibold">Laisser un avis</h6>
+                <form method="POST" action="{{ url_for('annuaire.ajouter_avis', id=entreprise.id) }}">
+                    <div class="mb-2">
+                        <select class="form-select form-select-sm" name="note" required style="width:150px;">
+                            <option value="">Note</option>
+                            {% for i in range(1,6) %}
+                            <option value="{{ i }}">{{ '⭐' * i }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <textarea class="form-control form-control-sm mb-2" name="commentaire"
+                              rows="2" placeholder="Votre commentaire..."></textarea>
+                    <button type="submit" class="btn btn-nc-primary btn-sm">Envoyer</button>
+                </form>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+
+    <div class="col-lg-4">
+        <div class="card p-3 mb-3">
+            <div class="text-center">
+                <div style="font-size:2.5rem; font-weight:700; color:#1a7a4a;">
+                    {{ '%.1f'|format(entreprise.note_moyenne) }}
+                </div>
+                <div class="text-warning mb-1">
+                    {% for i in range(5) %}
+                    <i class="fas fa-star{{ '' if i < (entreprise.note_moyenne|int) else '-o' }}"></i>
+                    {% endfor %}
+                </div>
+                <div class="text-muted small">{{ avis|length }} avis · {{ entreprise.nb_vues }} vues</div>
+            </div>
+        </div>
+
+        {% if entreprise.telephone %}
+        <a href="tel:{{ entreprise.telephone }}" class="btn btn-nc-primary w-100 mb-2">
+            <i class="fas fa-phone me-2"></i>Appeler
+        </a>
+        {% endif %}
+
+        <a href="{{ url_for('annuaire.index') }}" class="btn btn-outline-secondary w-100">
+            <i class="fas fa-arrow-left me-2"></i>Retour
+        </a>
+    </div>
+</div>
+{% endblock %}

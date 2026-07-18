@@ -1,0 +1,104 @@
+<!-- templates/marketplace/create.html -->
+{% extends "base.html" %}
+{% block title %}Publier une annonce{% endblock %}
+
+{% block content %}
+<div class="container py-4">
+    <h2 class="section-title">Publier une annonce</h2>
+    
+    <div class="card border-0 shadow-sm" style="border-radius: 16px;">
+        <div class="card-body p-4">
+            <form method="POST" enctype="multipart/form-data">
+                <div class="mb-3">
+                    <label class="form-label fw-semibold">Titre de l'annonce *</label>
+                    <input type="text" class="form-control" name="title" required 
+                           placeholder="Ex: iPhone 14 Pro en excellent état">
+                </div>
+                
+                <div class="row">
+                    <div class="col-md-4 mb-3">
+                        <label class="form-label fw-semibold">Catégorie *</label>
+                        <select class="form-select" name="category" required>
+                            {% for cat in ['Électronique','Vêtements','Immobilier','Véhicules','Matériel Agricole','Alimentation','Mobilier','Animaux','Matériaux de Construction','Autre'] %}
+                            <option value="{{ cat }}">{{ cat }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="col-md-4 mb-3">
+                        <label class="form-label fw-semibold">Prix (FCFA) *</label>
+                        <input type="number" class="form-control" name="price" required min="0" placeholder="0">
+                    </div>
+                    <div class="col-md-4 mb-3">
+                        <label class="form-label fw-semibold">État *</label>
+                        <select class="form-select" name="condition">
+                            <option value="neuf">Neuf</option>
+                            <option value="occasion">Occasion</option>
+                            <option value="reconditionné">Reconditionné</option>
+                        </select>
+                    </div>
+                </div>
+                
+                <div class="mb-3">
+                    <label class="form-label fw-semibold">Description *</label>
+                    <textarea class="form-control" name="description" rows="4" required 
+                              placeholder="Décrivez votre produit en détail..."></textarea>
+                </div>
+                
+                <div class="row">
+                    <div class="col-md-4 mb-3">
+                        <label class="form-label fw-semibold">Région</label>
+                        <select class="form-select" name="region">
+                            {% for r in ['Niamey','Agadez','Diffa','Dosso','Maradi','Tahoua','Tillabéri','Zinder'] %}
+                            <option value="{{ r }}" {{ 'selected' if current_user.region == r }}>{{ r }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="col-md-4 mb-3">
+                        <label class="form-label fw-semibold">Ville</label>
+                        <input type="text" class="form-control" name="ville">
+                    </div>
+                    <div class="col-md-4 mb-3">
+                        <label class="form-label fw-semibold">Quartier</label>
+                        <input type="text" class="form-control" name="quartier">
+                    </div>
+                </div>
+                
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label fw-semibold">Téléphone</label>
+                        <input type="tel" class="form-control" name="phone" value="{{ current_user.phone }}">
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label fw-semibold">WhatsApp</label>
+                        <input type="tel" class="form-control" name="whatsapp" placeholder="+227...">
+                    </div>
+                </div>
+                
+                <div class="mb-3">
+                    <label class="form-label fw-semibold">Photo</label>
+                    <input type="file" class="form-control" name="photo" accept="image/*">
+                </div>
+                
+                <div class="row mb-4">
+                    <div class="col-md-6">
+                        <div class="form-check">
+                            <input type="checkbox" class="form-check-input" name="price_negotiable" id="negotiable" checked>
+                            <label class="form-check-label" for="negotiable">Prix négociable</label>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-check">
+                            <input type="checkbox" class="form-check-input" name="delivery_available" id="delivery">
+                            <label class="form-check-label" for="delivery">Livraison disponible</label>
+                        </div>
+                    </div>
+                </div>
+                
+                <button type="submit" class="btn btn-nc btn-lg">
+                    <i class="bi bi-megaphone"></i> Publier l'annonce
+                </button>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

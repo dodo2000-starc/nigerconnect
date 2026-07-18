@@ -1,0 +1,129 @@
+{% extends "base.html" %}
+{% block title %}Assistant IA{% endblock %}
+{% block content %}
+<div style="max-width:760px; margin:0 auto;">
+    <h2 class="section-title mb-2">Assistant NigerConnect</h2>
+    <p class="text-muted mb-4">Posez vos questions et obtenez des réponses instantanées.</p>
+
+    <!-- Zone de chat -->
+    <div class="card mb-3" style="border-radius:16px; min-height:400px; max-height:500px; overflow-y:auto;" id="chatBox">
+        <div class="card-body p-3" id="chatMessages">
+            <!-- Message de bienvenue -->
+            <div class="d-flex gap-2 mb-3">
+                <div style="width:36px;height:36px;background:#1a7a4a;border-radius:50%;
+                            flex-shrink:0;display:flex;align-items:center;justify-content:center;">
+                    <i class="fas fa-robot text-white" style="font-size:.8rem;"></i>
+                </div>
+                <div style="background:#f0f4f0;border-radius:12px;padding:12px 16px;max-width:85%;">
+                    <p class="mb-0 small">
+                        Bonjour ! Je suis votre assistant NigerConnect 🇳🇪<br><br>
+                        Je peux vous aider à trouver des <strong>pharmacies, hôpitaux, garages</strong>,
+                        connaître les <strong>prix du marché</strong>, chercher un <strong>emploi</strong>,
+                        ou vous expliquer des <strong>démarches administratives</strong>.<br><br>
+                        Que puis-je faire pour vous ?
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Exemples -->
+    <div class="mb-3">
+        <p class="small fw-semibold text-muted mb-2">Questions fréquentes :</p>
+        <div class="d-flex flex-wrap gap-2">
+            {% for q in questions_exemples %}
+            <button class="btn btn-sm btn-outline-secondary"
+                    style="border-radius:20px; font-size:.78rem;"
+                    onclick="poserQuestion('{{ q }}')">
+                {{ q }}
+            </button>
+            {% endfor %}
+        </div>
+    </div>
+
+    <!-- Formulaire -->
+    <div class="card p-3" style="border-radius:16px;">
+        <div class="input-group">
+            <input type="text" class="form-control" id="questionInput"
+                   placeholder="Posez votre question..."
+                   onkeydown="if(event.key==='Enter') envoyerQuestion()">
+            <button class="btn btn-nc-primary" onclick="envoyerQuestion()" id="sendBtn">
+                <i class="fas fa-paper-plane"></i>
+            </button>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+function renderMarkdown(text) {
+    return text
+        .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
+        .replace(/\*(.*?)\*/g, '<em>$1</em>')
+        .replace(/\n/g, '<br>');
+}
+
+function ajouterMessage(texte, estUtilisateur) {
+    const box   = document.getElementById('chatMessages');
+    const chatBox = document.getElementById('chatBox');
+    const div   = document.createElement('div');
+    div.className = 'd-flex gap-2 mb-3' + (estUtilisateur ? ' justify-content-end' : '');
+
+    const avatar = estUtilisateur
+        ? `<div style="width:36px;height:36px;background:#e67e22;border-radius:50%;
+                       flex-shrink:0;display:flex;align-items:center;justify-content:center;order:2;">
+               <i class="fas fa-user text-white" style="font-size:.8rem;"></i>
+           </div>`
+        : `<div style="width:36px;height:36px;background:#1a7a4a;border-radius:50%;
+                       flex-shrink:0;display:flex;align-items:center;justify-content:center;">
+               <i class="fas fa-robot text-white" style="font-size:.8rem;"></i>
+           </div>`;
+
+    const bg  = estUtilisateur ? '#1a7a4a' : '#f0f4f0';
+    const col = estUtilisateur ? '#fff'     : '#333';
+
+    div.innerHTML = avatar + `
+        <div style="background:${bg};color:${col};border-radius:12px;
+                    padding:12px 16px;max-width:85%;">
+            <p class="mb-0 small">${renderMarkdown(texte)}</p>
+        </div>`;
+
+    box.appendChild(div);
+    chatBox.scrollTop = chatBox.scrollHeight;
+}
+
+function poserQuestion(q) {
+    document.getElementById('questionInput').value = q;
+    envoyerQuestion();
+}
+
+async function envoyerQuestion() {
+    const input  = document.getElementById('questionInput');
+    const btn    = document.getElementById('sendBtn');
+    const question = input.value.trim();
+    if (!question) return;
+
+    ajouterMessage(question, true);
+    input.value = '';
+    btn.disabled = true;
+    btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i>';
+
+    try {
+        const res  = await fetch('/assistant/question', {
+            method: 'POST',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify({question})
+        });
+        const data = await res.json();
+        ajouterMessage(data.reponse, false);
+    } catch(e) {
+        ajouterMessage('Désolé, une erreur est survenue. Réessayez.', false);
+    } finally {
+        btn.disabled = false;
+        btn.innerHTML = '<i class="fas fa-paper-plane"></i>';
+        input.focus();
+    }
+}
+</script>
+{% endblock %}

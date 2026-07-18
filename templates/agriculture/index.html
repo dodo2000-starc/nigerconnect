@@ -1,0 +1,76 @@
+{% extends "base.html" %}
+{% block title %}Agriculture{% endblock %}
+{% block content %}
+<h2 class="section-title mb-4">Agriculture & Marchés</h2>
+
+<div class="row g-3 mb-4">
+    <div class="col-md-4">
+        <a href="{{ url_for('agriculture.prix_marche') }}"
+           class="module-card text-center p-4">
+            <i class="fas fa-chart-line fa-2x mb-2" style="color:#27ae60;"></i>
+            <div class="fw-bold">Prix du marché</div>
+            <div class="text-muted small">Cours actuels des denrées</div>
+        </a>
+    </div>
+    <div class="col-md-4">
+        <a href="{{ url_for('agriculture.annonces') }}"
+           class="module-card text-center p-4">
+            <i class="fas fa-leaf fa-2x mb-2" style="color:#27ae60;"></i>
+            <div class="fw-bold">Annonces agricoles</div>
+            <div class="text-muted small">Vente, achat, location</div>
+        </a>
+    </div>
+    <div class="col-md-4">
+        <a href="{{ url_for('agriculture.publier') }}"
+           class="module-card text-center p-4">
+            <i class="fas fa-plus-circle fa-2x mb-2" style="color:#27ae60;"></i>
+            <div class="fw-bold">Publier une annonce</div>
+            <div class="text-muted small">Vendez votre récolte</div>
+        </a>
+    </div>
+</div>
+
+<h5 class="fw-bold mb-3">Prix actuels</h5>
+<div class="row g-2 mb-4">
+    {% for p in prix %}
+    <div class="col-6 col-md-4 col-lg-3">
+        <div class="card p-3 text-center h-100">
+            <div class="fw-bold" style="color:#27ae60;">{{ p.produit }}</div>
+            <div class="text-muted small mb-1">{{ p.marche }}</div>
+            <div class="fw-bold">{{ p.prix_min|int }}-{{ p.prix_max|int }}</div>
+            <div class="text-muted" style="font-size:.75rem;">FCFA/{{ p.unite }}</div>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+
+{% if annonces %}
+<h5 class="fw-bold mb-3">Annonces récentes</h5>
+<div class="row g-3">
+    {% for a in annonces %}
+    <div class="col-md-6 col-lg-4">
+        <div class="card p-3">
+            <div class="d-flex justify-content-between mb-2">
+                <span class="badge-nc-green">{{ a.type_annonce|capitalize }}</span>
+                <small class="text-muted">{{ a.date_creation|temps_ecoule }}</small>
+            </div>
+            <h6 class="fw-bold">{{ a.produit }}</h6>
+            <div class="text-muted small">
+                {{ a.quantite }} {{ a.unite }} · {{ a.ville }}
+            </div>
+            {% if a.prix %}
+            <div class="fw-bold mt-2" style="color:#1a7a4a;">{{ a.prix|prix_format }}</div>
+            {% endif %}
+            {% if a.telephone %}
+            <div class="mt-2">
+                <a href="tel:{{ a.telephone }}" class="btn btn-sm btn-nc-primary">
+                    <i class="fas fa-phone me-1"></i>Contacter
+                </a>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+    {% endfor %}
+</div>
+{% endif %}
+{% endblock %}

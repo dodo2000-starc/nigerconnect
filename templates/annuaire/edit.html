@@ -1,0 +1,95 @@
+<!-- templates/annuaire/edit.html -->
+{% extends "base.html" %}
+{% block title %}Modifier - {{ entry.name }}{% endblock %}
+
+{% block content %}
+<div class="container py-4">
+    <h2 class="section-title">Modifier : {{ entry.name }}</h2>
+    
+    <div class="card border-0 shadow-sm" style="border-radius: 16px;">
+        <div class="card-body p-4">
+            <form method="POST" enctype="multipart/form-data">
+                <div class="row">
+                    <div class="col-md-8 mb-3">
+                        <label class="form-label fw-semibold">Nom *</label>
+                        <input type="text" class="form-control" name="name" value="{{ entry.name }}" required>
+                    </div>
+                    <div class="col-md-4 mb-3">
+                        <label class="form-label fw-semibold">Catégorie *</label>
+                        <select class="form-select" name="category" required>
+                            {% for cat in ['Entreprise','Boutique','Pharmacie','Hôtel','Restaurant','École','Garage','Artisan','Service Public','Hôpital','Banque','ONG'] %}
+                            <option value="{{ cat }}" {{ 'selected' if entry.category == cat }}>{{ cat }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                </div>
+                
+                <div class="mb-3">
+                    <label class="form-label fw-semibold">Description</label>
+                    <textarea class="form-control" name="description" rows="3">{{ entry.description or '' }}</textarea>
+                </div>
+                
+                <div class="row">
+                    <div class="col-md-4 mb-3">
+                        <label class="form-label fw-semibold">Téléphone *</label>
+                        <input type="tel" class="form-control" name="phone" value="{{ entry.phone }}" required>
+                    </div>
+                    <div class="col-md-4 mb-3">
+                        <label class="form-label fw-semibold">Téléphone 2</label>
+                        <input type="tel" class="form-control" name="phone2" value="{{ entry.phone2 or '' }}">
+                    </div>
+                    <div class="col-md-4 mb-3">
+                        <label class="form-label fw-semibold">WhatsApp</label>
+                        <input type="tel" class="form-control" name="whatsapp" value="{{ entry.whatsapp or '' }}">
+                    </div>
+                </div>
+                
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label fw-semibold">Email</label>
+                        <input type="email" class="form-control" name="email" value="{{ entry.email or '' }}">
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label fw-semibold">Région</label>
+                        <select class="form-select" name="region">
+                            {% for r in ['Niamey','Agadez','Diffa','Dosso','Maradi','Tahoua','Tillabéri','Zinder'] %}
+                            <option value="{{ r }}" {{ 'selected' if entry.region == r }}>{{ r }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                </div>
+                
+                <div class="row">
+                    <div class="col-md-4 mb-3">
+                        <label class="form-label fw-semibold">Ville</label>
+                        <input type="text" class="form-control" name="ville" value="{{ entry.ville or '' }}">
+                    </div>
+                    <div class="col-md-4 mb-3">
+                        <label class="form-label fw-semibold">Quartier</label>
+                        <input type="text" class="form-control" name="quartier" value="{{ entry.quartier or '' }}">
+                    </div>
+                    <div class="col-md-4 mb-3">
+                        <label class="form-label fw-semibold">Adresse</label>
+                        <input type="text" class="form-control" name="adresse" value="{{ entry.adresse or '' }}">
+                    </div>
+                </div>
+                
+                <div class="mb-3">
+                    <label class="form-label fw-semibold">Tags</label>
+                    <input type="text" class="form-control" name="tags" value="{{ entry.tags or '' }}">
+                </div>
+                
+                <div class="mb-4">
+                    <label class="form-label fw-semibold">Nouvelle photo</label>
+                    <input type="file" class="form-control" name="photo" accept="image/*">
+                </div>
+                
+                <button type="submit" class="btn btn-nc">
+                    <i class="bi bi-check-circle"></i> Enregistrer les modifications
+                </button>
+                <a href="{{ url_for('annuaire.detail', id=entry.id) }}" class="btn btn-outline-secondary ms-2">Annuler</a>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

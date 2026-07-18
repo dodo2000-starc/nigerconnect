@@ -1,0 +1,117 @@
+<!-- templates/annuaire/create.html -->
+{% extends "base.html" %}
+{% block title %}Ajouter à l'annuaire{% endblock %}
+
+{% block content %}
+<div class="container py-4">
+    <h2 class="section-title">Ajouter un établissement</h2>
+    
+    <div class="card border-0 shadow-sm" style="border-radius: 16px;">
+        <div class="card-body p-4">
+            <form method="POST" enctype="multipart/form-data">
+                <div class="row">
+                    <div class="col-md-8 mb-3">
+                        <label class="form-label fw-semibold">Nom de l'établissement *</label>
+                        <input type="text" class="form-control" name="name" required placeholder="Ex: Pharmacie Centrale">
+                    </div>
+                    <div class="col-md-4 mb-3">
+                        <label class="form-label fw-semibold">Catégorie *</label>
+                        <select class="form-select" name="category" required>
+                            {% for cat in ['Entreprise','Boutique','Pharmacie','Hôtel','Restaurant','École','Garage','Artisan','Service Public','Hôpital','Banque','ONG'] %}
+                            <option value="{{ cat }}">{{ cat }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                </div>
+                
+                <div class="mb-3">
+                    <label class="form-label fw-semibold">Description</label>
+                    <textarea class="form-control" name="description" rows="3" placeholder="Décrivez votre établissement..."></textarea>
+                </div>
+                
+                <div class="row">
+                    <div class="col-md-4 mb-3">
+                        <label class="form-label fw-semibold">Téléphone *</label>
+                        <input type="tel" class="form-control" name="phone" required placeholder="+227...">
+                    </div>
+                    <div class="col-md-4 mb-3">
+                        <label class="form-label fw-semibold">Téléphone 2</label>
+                        <input type="tel" class="form-control" name="phone2" placeholder="+227...">
+                    </div>
+                    <div class="col-md-4 mb-3">
+                        <label class="form-label fw-semibold">WhatsApp</label>
+                        <input type="tel" class="form-control" name="whatsapp" placeholder="+227...">
+                    </div>
+                </div>
+                
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label fw-semibold">Email</label>
+                        <input type="email" class="form-control" name="email" placeholder="email@exemple.com">
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label fw-semibold">Site web</label>
+                        <input type="url" class="form-control" name="website" placeholder="https://...">
+                    </div>
+                </div>
+                
+                <hr>
+                <h5 class="fw-bold">Localisation</h5>
+                
+                <div class="row">
+                    <div class="col-md-4 mb-3">
+                        <label class="form-label fw-semibold">Région *</label>
+                        <select class="form-select" name="region" required>
+                            {% for r in ['Niamey','Agadez','Diffa','Dosso','Maradi','Tahoua','Tillabéri','Zinder'] %}
+                            <option value="{{ r }}">{{ r }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="col-md-4 mb-3">
+                        <label class="form-label fw-semibold">Ville</label>
+                        <input type="text" class="form-control" name="ville">
+                    </div>
+                    <div class="col-md-4 mb-3">
+                        <label class="form-label fw-semibold">Quartier</label>
+                        <input type="text" class="form-control" name="quartier">
+                    </div>
+                </div>
+                
+                <div class="mb-3">
+                    <label class="form-label fw-semibold">Adresse complète</label>
+                    <input type="text" class="form-control" name="adresse" placeholder="Rue, repère...">
+                </div>
+                
+                <hr>
+                
+                <div class="row">
+                    <div class="col-md-8 mb-3">
+                        <label class="form-label fw-semibold">Horaires</label>
+                        <input type="text" class="form-control" name="horaires" placeholder="Ex: Lun-Sam 8h-18h">
+                    </div>
+                    <div class="col-md-4 mb-3 d-flex align-items-end">
+                        <div class="form-check">
+                            <input type="checkbox" class="form-check-input" name="is_open_24h" id="is_open_24h">
+                            <label class="form-check-label" for="is_open_24h">Ouvert 24h/24</label>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="mb-3">
+                    <label class="form-label fw-semibold">Photo</label>
+                    <input type="file" class="form-control" name="photo" accept="image/*">
+                </div>
+                
+                <div class="mb-4">
+                    <label class="form-label fw-semibold">Tags (mots-clés séparés par des virgules)</label>
+                    <input type="text" class="form-control" name="tags" placeholder="Ex: médicaments, santé, garde">
+                </div>
+                
+                <button type="submit" class="btn btn-nc btn-lg">
+                    <i class="bi bi-plus-circle"></i> Ajouter à l'annuaire
+                </button>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,166 @@
+{% extends "base.html" %}
+{% block title %}Marché{% endblock %}
+
+{% block content %}
+<div class="container-fluid">
+
+    <!-- Barre de recherche -->
+    <div class="search-container">
+        <h4 class="text-white fw-bold mb-3">
+            <i class="fas fa-store me-2"></i>Marché Numérique
+        </h4>
+        <form method="GET">
+            <div class="row g-2">
+                <div class="col-md-4">
+                    <input type="text" class="form-control" name="q"
+                           value="{{ recherche }}"
+                           placeholder="Rechercher un produit...">
+                </div>
+                <div class="col-md-3">
+                    <select class="form-select" name="categorie">
+                        <option value="">Toutes catégories</option>
+                        {% for c in categories %}
+                        <option value="{{ c }}" {% if c == categorie_active %}selected{% endif %}>{{ c }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="col-md-3">
+                    <select class="form-select" name="ville">
+                        <option value="">Toutes villes</option>
+                        {% for v in villes %}
+                        <option value="{{ v }}" {% if v == ville_active %}selected{% endif %}>{{ v }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="col-md-2">
+                    <button type="submit" class="btn w-100"
+                            style="background:#E05206;color:#fff;border-radius:10px;padding:10px;">
+                        <i class="fas fa-search"></i> Chercher
+                    </button>
+                </div>
+            </div>
+        </form>
+    </div>
+
+    <!-- Header -->
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+            <h2 class="section-title">Annonces</h2>
+            <p class="text-muted mb-0">{{ annonces.total }} annonce(s) trouvée(s)</p>
+        </div>
+        {% if current_user.is_authenticated %}
+        <a href="{{ url_for('marketplace.publier') }}" class="btn btn-nc-orange">
+            <i class="fas fa-plus me-2"></i>Publier une annonce
+        </a>
+        {% else %}
+        <a href="{{ url_for('auth.connexion') }}" class="btn btn-nc-orange">
+            <i class="fas fa-sign-in-alt me-2"></i>Se connecter pour publier
+        </a>
+        {% endif %}
+    </div>
+
+    <!-- Liste des annonces -->
+    {% if annonces.items %}
+    <div class="row g-3">
+        {% for annonce in annonces.items %}
+        <div class="col-6 col-md-4 col-lg-3">
+            <div class="card h-100" style="border-radius:16px; overflow:hidden;">
+                
+                <!-- Image placeholder -->
+                <div style="height:160px; background:linear-gradient(135deg,#0DB02B,#E05206); 
+                            display:flex; align-items:center; justify-content:center; position:relative;">
+                    <i class="fas fa-image fa-3x text-white opacity-50"></i>
+                    {% if annonce.est_premium %}
+                    <span style="position:absolute; top:10px; right:10px; background:#FFD700; color:#333; 
+                                 padding:4px 10px; border-radius:20px; font-size:.7rem; font-weight:700;">
+                        ⭐ PREMIUM
+                    </span>
+                    {% endif %}
+                </div>
+
+                <div class="p-3">
+                    <span class="badge-nc-orange mb-2 d-inline-block">{{ annonce.categorie }}</span>
+                    
+                    <h6 class="fw-bold mb-2" style="min-height:44px;">
+                        {{ annonce.titre[:50] }}{% if annonce.titre|length > 50 %}...{% endif %}
+                    </h6>
+                    
+                    <p class="text-muted small mb-2">
+                        <i class="fas fa-map-marker-alt me-1" style="color:#E05206;"></i>
+                        {{ annonce.ville }}{% if annonce.quartier %}, {{ annonce.quartier }}{% endif %}
+                    </p>
+                    
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div>
+                            <div style="font-size:1.1rem; font-weight:700; color:#0DB02B;">
+                                {{ annonce.prix|prix_format }}
+                            </div>
+                            {% if annonce.prix_negociable %}
+                            <small class="text-muted" style="font-size:.7rem;">Négociable</small>
+                            {% endif %}
+                        </div>
+                        <a href="{{ url_for('marketplace.detail', id=annonce.id) }}"
+                           class="btn btn-sm btn-nc-primary">
+                            <i class="fas fa-eye"></i>
+                        </a>
+                    </div>
+                    
+                    <div class="mt-2 text-muted" style="font-size:.7rem;">
+                        <i class="fas fa-clock me-1"></i>{{ annonce.date_creation|temps_ecoule }}
+                        · <i class="fas fa-eye me-1"></i>{{ annonce.nb_vues }} vues
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+
+    <!-- Pagination -->
+    {% if annonces.pages > 1 %}
+    <nav class="mt-4">
+        <ul class="pagination justify-content-center">
+            {% if annonces.has_prev %}
+            <li class="page-item">
+                <a class="page-link" href="{{ url_for('marketplace.index', page=annonces.prev_num, q=recherche, categorie=categorie_active, ville=ville_active) }}">
+                    <i class="fas fa-chevron-left"></i>
+                </a>
+            </li>
+            {% endif %}
+            
+            {% for p in annonces.iter_pages() %}
+                {% if p %}
+                    <li class="page-item {% if p == annonces.page %}active{% endif %}">
+                        <a class="page-link" href="{{ url_for('marketplace.index', page=p, q=recherche, categorie=categorie_active, ville=ville_active) }}">{{ p }}</a>
+                    </li>
+                {% else %}
+                    <li class="page-item disabled"><span class="page-link">...</span></li>
+                {% endif %}
+            {% endfor %}
+            
+            {% if annonces.has_next %}
+            <li class="page-item">
+                <a class="page-link" href="{{ url_for('marketplace.index', page=annonces.next_num, q=recherche, categorie=categorie_active, ville=ville_active) }}">
+                    <i class="fas fa-chevron-right"></i>
+                </a>
+            </li>
+            {% endif %}
+        </ul>
+    </nav>
+    {% endif %}
+
+    {% else %}
+    <!-- Aucun résultat -->
+    <div class="text-center py-5" style="background:white; border-radius:16px;">
+        <i class="fas fa-search fa-4x text-muted mb-3" style="opacity:.3;"></i>
+        <h4 class="fw-bold text-muted mb-2">Aucune annonce trouvée</h4>
+        <p class="text-muted mb-4">Essayez de modifier vos critères de recherche.</p>
+        {% if current_user.is_authenticated %}
+        <a href="{{ url_for('marketplace.publier') }}" class="btn btn-nc-orange">
+            <i class="fas fa-plus me-2"></i>Publier la première annonce
+        </a>
+        {% endif %}
+    </div>
+    {% endif %}
+
+</div>
+{% endblock %}

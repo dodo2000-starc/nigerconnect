@@ -1,0 +1,46 @@
+# Environnement virtuel
+venv/
+env/
+ENV/
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.Python
+*.egg-info/
+.pytest_cache/
+
+# Base de données locale
+*.db
+*.sqlite
+*.sqlite3
+instance/
+
+# Fichiers sensibles
+.env
+*.env
+
+# Uploads
+static/uploads/*
+!static/uploads/.gitkeep
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Logs
+*.log
+logs/
+
+# Fichiers temporaires
+*.tmp
+*.bak

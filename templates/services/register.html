@@ -1,0 +1,43 @@
+<!-- templates/services/register.html -->
+{% extends "base.html" %}
+{% block title %}Devenir prestataire{% endblock %}
+
+{% block content %}
+<div class="container py-4">
+    <h2 class="section-title">Devenir Prestataire</h2>
+    <p class="text-muted mb-4">Inscrivez-vous pour offrir vos services et recevoir des demandes de clients.</p>
+    
+    <div class="card border-0 shadow-sm" style="border-radius: 16px;">
+        <div class="card-body p-4">
+            <form method="POST">
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label fw-semibold">Type de service *</label>
+                        <select class="form-select" name="service_type" required>
+                            {% for s in ['Plombier','Électricien','Mécanicien','Informaticien','Maçon','Soudeur','Couturier','Menuisier','Peintre','Climatisation','Nettoyage','Autre'] %}
+                            <option value="{{ s }}">{{ s }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label fw-semibold">Années d'expérience</label>
+                        <input type="number" class="form-control" name="experience_years" min="0" value="0">
+                    </div>
+                </div>
+                
+                <div class="mb-3">
+                    <label class="form-label fw-semibold">Spécialités (séparées par des virgules)</label>
+                    <input type="text" class="form-control" name="specialites" 
+                           placeholder="Ex: Installation, Réparation, Dépannage urgent">
+                </div>
+                
+                <div class="mb-3">
+                    <label class="form-label fw-semibold">Description de vos services</label>
+                    <textarea class="form-control" name="description" rows="3" 
+                              placeholder="Décrivez votre expérience et vos compétences..."></textarea>
+                </div>
+                
+                <div class="row">
+                    <div class="col-md-4 mb-3">
+                        <label class="form-label fw-semibold">Tarif minimum (FCFA)</label>
+                        

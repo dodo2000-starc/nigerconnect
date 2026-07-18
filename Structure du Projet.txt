@@ -1,0 +1,58 @@
+nigerconnect/
+├── app.py                          # Application principale
+├── config.py                       # Configuration
+├── requirements.txt                # Dépendances
+├── init_db.py                      # Initialisation base de données
+├── models/
+│   ├── __init__.py
+│   ├── user.py
+│   ├── annuaire.py
+│   ├── marketplace.py
+│   ├── service.py
+│   ├── transport.py
+│   ├── payment.py
+│   ├── health.py
+│   ├── job.py
+│   ├── agriculture.py
+│   ├── admin_service.py
+│   └── news.py
+├── routes/
+│   ├── __init__.py
+│   ├── auth.py
+│   ├── annuaire.py
+│   ├── marketplace.py
+│   ├── services.py
+│   ├── transport.py
+│   ├── payments.py
+│   ├── health.py
+│   ├── jobs.py
+│   ├── agriculture.py
+│   ├── admin_services.py
+│   ├── news.py
+│   ├── ai_assistant.py
+│   └── dashboard.py
+├── templates/
+│   ├── base.html
+│   ├── index.html
+│   ├── auth/
+│   ├── annuaire/
+│   ├── marketplace/
+│   ├── services/
+│   ├── transport/
+│   ├── payments/
+│   ├── health/
+│   ├── jobs/
+│   ├── agriculture/
+│   ├── admin_services/
+│   ├── news/
+│   ├── ai/
+│   └── dashboard/
+├── static/
+│   ├── css/
+│   ├── js/
+│   └── img/
+└── utils/
+    ├── __init__.py
+    ├── ai_engine.py
+    ├── sms_gateway.py
+    └── helpers.py

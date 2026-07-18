@@ -1,0 +1,106 @@
+{% extends "base.html" %}
+{% block title %}Annuaire{% endblock %}
+{% block content %}
+<div class="search-container">
+    <h4 class="text-white fw-bold mb-3">
+        <i class="fas fa-book me-2"></i>Annuaire National
+    </h4>
+    <form method="GET">
+        <div class="row g-2">
+            <div class="col-md-5">
+                <input type="text" class="form-control" name="q"
+                       value="{{ recherche }}" placeholder="Rechercher un établissement...">
+            </div>
+            <div class="col-md-3">
+                <select class="form-select" name="categorie">
+                    <option value="">Toutes catégories</option>
+                    {% for c in categories %}
+                    <option value="{{ c }}" {{ 'selected' if c == categorie_active }}>{{ c }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="col-md-2">
+                <select class="form-select" name="ville">
+                    <option value="">Toutes villes</option>
+                    {% for v in villes %}
+                    <option value="{{ v }}" {{ 'selected' if v == ville_active }}>{{ v }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="col-md-2">
+                <button type="submit" class="btn w-100"
+                        style="background:#e67e22;color:#fff;border-radius:10px;">
+                    <i class="fas fa-search"></i>
+                </button>
+            </div>
+        </div>
+    </form>
+</div>
+
+<div class="d-flex justify-content-between align-items-center mb-3">
+    <h5 class="fw-bold">{{ entreprises.total }} résultat(s)</h5>
+    <a href="{{ url_for('annuaire.ajouter') }}" class="btn btn-nc-primary btn-sm">
+        <i class="fas fa-plus me-1"></i>Ajouter
+    </a>
+</div>
+
+<div class="row g-3">
+    {% for e in entreprises.items %}
+    <div class="col-md-6 col-lg-4">
+        <div class="card p-3 h-100">
+            <div class="d-flex justify-content-between mb-2">
+                <span class="badge-nc-green">{{ e.categorie }}</span>
+                {% if e.est_premium %}
+                <span class="badge bg-warning text-dark" style="font-size:.7rem;">⭐ Premium</span>
+                {% endif %}
+            </div>
+            <h6 class="fw-bold">{{ e.nom }}</h6>
+            {% if e.description %}
+            <p class="text-muted small mb-2">{{ e.description[:80] }}...</p>
+            {% endif %}
+            <div class="text-muted small mb-3">
+                {% if e.quartier %}<i class="fas fa-map-marker-alt me-1"></i>{{ e.quartier }}, {% endif %}
+                {{ e.ville }}<br>
+                {% if e.telephone %}
+                <i class="fas fa-phone me-1"></i>{{ e.telephone }}
+                {% endif %}
+            </div>
+            <div class="d-flex justify-content-between align-items-center mt-auto">
+                <div class="text-warning small">
+                    {% for i in range(5) %}
+                    <i class="fas fa-star{{ '' if i < (e.note_moyenne|int) else '-o' }}"></i>
+                    {% endfor %}
+                    <span class="text-muted">({{ '%.1f'|format(e.note_moyenne) }})</span>
+                </div>
+                <a href="{{ url_for('annuaire.detail', id=e.id) }}"
+                   class="btn btn-sm btn-nc-primary">Détails</a>
+            </div>
+        </div>
+    </div>
+    {% else %}
+    <div class="col-12 text-center py-5">
+        <i class="fas fa-search fa-3x text-muted mb-3"></i>
+        <p class="text-muted">Aucun résultat trouvé.</p>
+        <a href="{{ url_for('annuaire.ajouter') }}" class="btn btn-nc-primary">
+            Ajouter le premier établissement
+        </a>
+    </div>
+    {% endfor %}
+</div>
+
+<!-- Pagination -->
+{% if entreprises.pages > 1 %}
+<nav class="mt-4">
+    <ul class="pagination justify-content-center">
+        {% for p in entreprises.iter_pages() %}
+        {% if p %}
+        <li class="page-item {{ 'active' if p == entreprises.page }}">
+            <a class="page-link" href="{{ url_for('annuaire.index', page=p,
+               q=recherche, categorie=categorie_active, ville=ville_active) }}">{{ p }}</a>
+        </li>
+        {% endif %}
+        {% endfor %}
+    </ul>
+</nav>
+{% endif %}
+{% endblock %}

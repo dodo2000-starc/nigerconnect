@@ -1,0 +1,58 @@
+<!-- templates/auth/login.html -->
+{% extends "base.html" %}
+{% block title %}Connexion{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-md-5">
+            <div class="card border-0 shadow-sm" style="border-radius: 20px;">
+                <div class="card-body p-4">
+                    <div class="text-center mb-4">
+                        <h3 class="fw-bold" style="color: var(--nc-primary);">🇳🇪 Connexion</h3>
+                        <p class="text-muted">Accédez à votre compte NigerConnect</p>
+                    </div>
+                    
+                    <form method="POST">
+                        <div class="mb-3">
+                            <label class="form-label fw-semibold">Téléphone, email ou nom d'utilisateur</label>
+                            <div class="input-group">
+                                <span class="input-group-text"><i class="bi bi-person"></i></span>
+                                <input type="text" class="form-control" name="login_id" 
+                                       placeholder="Ex: 90123456" required>
+                            </div>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label class="form-label fw-semibold">Mot de passe</label>
+                            <div class="input-group">
+                                <span class="input-group-text"><i class="bi bi-lock"></i></span>
+                                <input type="password" class="form-control" name="password" 
+                                       placeholder="Votre mot de passe" required>
+                            </div>
+                        </div>
+                        
+                        <div class="mb-3 form-check">
+                            <input type="checkbox" class="form-check-input" name="remember" id="remember">
+                            <label class="form-check-label" for="remember">Se souvenir de moi</label>
+                        </div>
+                        
+                        <button type="submit" class="btn btn-nc w-100 py-2 mb-3">
+                            <i class="bi bi-box-arrow-in-right"></i> Se connecter
+                        </button>
+                        
+                        <div class="text-center">
+                            <p class="text-muted">
+                                Pas encore de compte ? 
+                                <a href="{{ url_for('auth.register') }}" style="color: var(--nc-primary); font-weight: 600;">
+                                    S'inscrire
+                                </a>
+                            </p>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

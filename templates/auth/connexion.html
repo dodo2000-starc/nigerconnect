@@ -1,0 +1,66 @@
+{% extends "base.html" %}
+{% block title %}Connexion{% endblock %}
+{% block content %}
+<div class="container py-5" style="max-width:420px;">
+    <div class="card p-4">
+        <div class="text-center mb-4">
+            <div style="width:64px;height:64px;background:#1a7a4a;border-radius:50%;
+                        display:flex;align-items:center;justify-content:center;margin:0 auto 12px;">
+                <i class="fas fa-globe-africa fa-2x text-white"></i>
+            </div>
+            <h4 class="fw-bold">Connexion à NigerConnect</h4>
+            <p class="text-muted small">Accédez à tous vos services</p>
+        </div>
+        <form method="POST">
+            <div class="mb-3">
+                <label class="form-label">Numéro de téléphone *</label>
+                <div class="input-group">
+                    <span class="input-group-text"><i class="fas fa-phone"></i></span>
+                    <input type="text" class="form-control" name="telephone"
+                           placeholder="Ex: 90000000" required autofocus>
+                </div>
+            </div>
+            <div class="mb-3">
+                <label class="form-label">Mot de passe *</label>
+                <div class="input-group">
+                    <span class="input-group-text"><i class="fas fa-lock"></i></span>
+                    <input type="password" class="form-control" name="password"
+                           placeholder="Votre mot de passe" required id="pwd">
+                    <button class="btn btn-outline-secondary" type="button"
+                            onclick="togglePwd()">
+                        <i class="fas fa-eye" id="eyeIcon"></i>
+                    </button>
+                </div>
+            </div>
+            <div class="form-check mb-3">
+                <input type="checkbox" class="form-check-input" name="remember" id="remember">
+                <label class="form-check-label small" for="remember">Se souvenir de moi</label>
+            </div>
+            <button type="submit" class="btn btn-nc-primary w-100">
+                <i class="fas fa-sign-in-alt me-2"></i>Se connecter
+            </button>
+        </form>
+        <hr>
+        <p class="text-center small mb-0">
+            Pas encore de compte ?
+            <a href="{{ url_for('auth.inscription') }}" class="fw-semibold"
+               style="color:#1a7a4a;">S'inscrire gratuitement</a>
+        </p>
+    </div>
+</div>
+{% endblock %}
+{% block extra_js %}
+<script>
+function togglePwd() {
+    const p = document.getElementById('pwd');
+    const i = document.getElementById('eyeIcon');
+    if (p.type === 'password') {
+        p.type = 'text';
+        i.className = 'fas fa-eye-slash';
+    } else {
+        p.type = 'password';
+        i.className = 'fas fa-eye';
+    }
+}
+</script>
+{% endblock %}

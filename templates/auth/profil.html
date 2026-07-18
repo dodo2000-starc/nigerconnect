@@ -1,0 +1,60 @@
+{% extends "base.html" %}
+{% block title %}Mon Profil{% endblock %}
+{% block content %}
+<div class="container py-4" style="max-width:600px;">
+    <h2 class="section-title mb-4">Mon Profil</h2>
+    <div class="card p-4">
+        <div class="text-center mb-4">
+            <div style="width:80px;height:80px;background:#1a7a4a;border-radius:50%;
+                        display:flex;align-items:center;justify-content:center;margin:0 auto 10px;">
+                <i class="fas fa-user fa-2x text-white"></i>
+            </div>
+            <h5 class="fw-bold">{{ current_user.nom_complet() }}</h5>
+            <span class="badge-nc-green">{{ current_user.type_compte|capitalize }}</span>
+        </div>
+        <form method="POST">
+            <div class="row g-3">
+                <div class="col-md-6">
+                    <label class="form-label">Nom</label>
+                    <input type="text" class="form-control" name="nom"
+                           value="{{ current_user.nom }}">
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label">Prénom</label>
+                    <input type="text" class="form-control" name="prenom"
+                           value="{{ current_user.prenom }}">
+                </div>
+                <div class="col-12">
+                    <label class="form-label">Email</label>
+                    <input type="email" class="form-control" name="email"
+                           value="{{ current_user.email or '' }}">
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label">Ville</label>
+                    <select class="form-select" name="ville">
+                        {% for v in ['Niamey','Zinder','Maradi','Tahoua','Agadez','Dosso','Tillabéri','Diffa'] %}
+                        <option value="{{ v }}" {{ 'selected' if v == current_user.ville }}>{{ v }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label">Quartier</label>
+                    <input type="text" class="form-control" name="quartier"
+                           value="{{ current_user.quartier or '' }}">
+                </div>
+                <div class="col-12"><hr><p class="fw-semibold">Changer le mot de passe</p></div>
+                <div class="col-12">
+                    <label class="form-label">Nouveau mot de passe (laisser vide pour ne pas changer)</label>
+                    <input type="password" class="form-control" name="new_password"
+                           placeholder="Nouveau mot de passe">
+                </div>
+                <div class="col-12">
+                    <button type="submit" class="btn btn-nc-primary">
+                        <i class="fas fa-save me-2"></i>Enregistrer
+                    </button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}

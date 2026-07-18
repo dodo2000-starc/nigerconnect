@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+{% block title %}Erreur serveur{% endblock %}
+{% block content %}
+<div class="text-center py-5">
+    <div style="font-size:6rem; font-weight:900; color:#e74c3c; opacity:.3;">500</div>
+    <h3 class="fw-bold mb-2">Erreur serveur</h3>
+    <p class="text-muted mb-4">Une erreur inattendue s'est produite. Réessayez.</p>
+    <a href="{{ url_for('main.index') }}" class="btn btn-nc-primary">
+        <i class="fas fa-home me-2"></i>Retour à l'accueil
+    </a>
+</div>
+{% endblock %}

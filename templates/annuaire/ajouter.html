@@ -1,0 +1,65 @@
+{% extends "base.html" %}
+{% block title %}Ajouter un établissement{% endblock %}
+{% block content %}
+<div class="container py-4" style="max-width:700px;">
+    <h2 class="section-title mb-4">Ajouter un établissement</h2>
+    <div class="card p-4">
+        <form method="POST">
+            <div class="row g-3">
+                <div class="col-md-8">
+                    <label class="form-label">Nom de l'établissement *</label>
+                    <input type="text" class="form-control" name="nom" required>
+                </div>
+                <div class="col-md-4">
+                    <label class="form-label">Catégorie *</label>
+                    <select class="form-select" name="categorie" required>
+                        {% for c in categories %}
+                        <option value="{{ c }}">{{ c }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="col-12">
+                    <label class="form-label">Description</label>
+                    <textarea class="form-control" name="description" rows="3"></textarea>
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label">Téléphone</label>
+                    <input type="text" class="form-control" name="telephone">
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label">Email</label>
+                    <input type="email" class="form-control" name="email">
+                </div>
+                <div class="col-12">
+                    <label class="form-label">Adresse</label>
+                    <input type="text" class="form-control" name="adresse">
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label">Ville</label>
+                    <select class="form-select" name="ville">
+                        {% for v in villes %}
+                        <option value="{{ v }}">{{ v }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label">Quartier</label>
+                    <input type="text" class="form-control" name="quartier">
+                </div>
+                <div class="col-12">
+                    <label class="form-label">Horaires</label>
+                    <input type="text" class="form-control" name="horaires"
+                           placeholder="Ex: Lun-Sam 8h-20h">
+                </div>
+                <div class="col-12">
+                    <button type="submit" class="btn btn-nc-primary">
+                        <i class="fas fa-save me-2"></i>Enregistrer
+                    </button>
+                    <a href="{{ url_for('annuaire.index') }}"
+                       class="btn btn-outline-secondary ms-2">Annuler</a>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}

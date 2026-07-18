@@ -1,0 +1,68 @@
+{% extends "base.html" %}
+{% block title %}Paiements{% endblock %}
+{% block content %}
+<h2 class="section-title mb-4">Paiements & Mobile Money</h2>
+
+<div class="row g-3 mb-4">
+    <div class="col-md-4">
+        <a href="{{ url_for('payments.mobile_money') }}"
+           class="module-card text-center p-4">
+            <i class="fas fa-mobile-alt fa-2x mb-2" style="color:#1abc9c;"></i>
+            <div class="fw-bold">Mobile Money</div>
+            <div class="text-muted small">Orange, Airtel, Moov</div>
+        </a>
+    </div>
+    <div class="col-md-4">
+        <a href="{{ url_for('payments.payer_facture') }}"
+           class="module-card text-center p-4">
+            <i class="fas fa-file-invoice fa-2x mb-2" style="color:#3498db;"></i>
+            <div class="fw-bold">Payer une facture</div>
+            <div class="text-muted small">Eau, électricité, internet</div>
+        </a>
+    </div>
+    <div class="col-md-4">
+        <a href="{{ url_for('payments.historique') }}"
+           class="module-card text-center p-4">
+            <i class="fas fa-history fa-2x mb-2" style="color:#9b59b6;"></i>
+            <div class="fw-bold">Historique</div>
+            <div class="text-muted small">Toutes vos transactions</div>
+        </a>
+    </div>
+</div>
+
+<h5 class="fw-bold mb-3">Transactions récentes</h5>
+<div class="card">
+    <div class="card-body p-0">
+        {% for t in transactions %}
+        <div class="d-flex align-items-center gap-3 p-3
+                    {% if not loop.last %}border-bottom{% endif %}">
+            <div style="width:40px;height:40px;border-radius:50%;
+                        background:{{ '#1abc9c20' if t.statut=='succes' else '#e74c3c20' }};
+                        display:flex;align-items:center;justify-content:center;">
+                <i class="fas fa-{{ 'check' if t.statut=='succes' else 'times' }}"
+                   style="color:{{ '#1abc9c' if t.statut=='succes' else '#e74c3c' }};"></i>
+            </div>
+            <div class="flex-grow-1">
+                <div class="fw-semibold small">{{ t.description or t.type_transaction }}</div>
+                <div class="text-muted" style="font-size:.75rem;">
+                    {{ t.reference }} · {{ t.date_creation|temps_ecoule }}
+                </div>
+            </div>
+            <div class="text-end">
+                <div class="fw-bold">{{ t.montant|prix_format }}</div>
+                <span class="badge bg-{{ 'success' if t.statut=='succes' else 'danger' }}
+                             bg-opacity-10 text-{{ 'success' if t.statut=='succes' else 'danger' }}"
+                      style="font-size:.7rem;">
+                    {{ t.statut }}
+                </span>
+            </div>
+        </div>
+        {% else %}
+        <div class="text-center py-4 text-muted">
+            <i class="fas fa-receipt fa-2x mb-2"></i>
+            <p class="mb-0">Aucune transaction.</p>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}

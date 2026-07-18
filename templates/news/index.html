@@ -1,0 +1,60 @@
+{% extends "base.html" %}
+{% block title %}Actualités{% endblock %}
+{% block content %}
+<h2 class="section-title mb-4">Actualités & Alertes</h2>
+
+{% if alertes %}
+<div class="mb-4">
+    {% for a in alertes %}
+    <div class="alert-urgent d-flex align-items-start gap-3">
+        <i class="fas fa-exclamation-triangle fa-lg mt-1"></i>
+        <div class="flex-grow-1">
+            <div class="fw-bold">{{ a.titre }}</div>
+            <div class="small opacity-90 mt-1">{{ a.contenu[:120] }}...</div>
+        </div>
+        <a href="{{ url_for('news.detail', id=a.id) }}"
+           class="btn btn-sm btn-light flex-shrink-0">Lire</a>
+    </div>
+    {% endfor %}
+</div>
+{% endif %}
+
+<!-- Filtres -->
+<div class="d-flex gap-2 flex-wrap mb-4">
+    <a href="{{ url_for('news.index') }}"
+       class="btn btn-sm {{ 'btn-nc-primary' if not categorie_active else 'btn-outline-secondary' }}"
+       style="border-radius:20px;">Tout</a>
+    {% for c in categories %}
+    <a href="{{ url_for('news.index', categorie=c) }}"
+       class="btn btn-sm {{ 'btn-nc-primary' if c == categorie_active else 'btn-outline-secondary' }}"
+       style="border-radius:20px;">{{ c }}</a>
+    {% endfor %}
+</div>
+
+<div class="row g-3">
+    {% for a in actualites.items %}
+    <div class="col-md-6 col-lg-4">
+        <div class="card p-3 h-100">
+            <div class="d-flex justify-content-between align-items-start mb-2">
+                <span class="badge-nc-green">{{ a.categorie }}</span>
+                {% if a.est_urgent %}
+                <span class="badge-urgent">🚨 Urgent</span>
+                {% endif %}
+            </div>
+            <h6 class="fw-bold mb-2">{{ a.titre }}</h6>
+            <p class="text-muted small mb-3">{{ a.contenu[:100] }}...</p>
+            <div class="d-flex justify-content-between align-items-center mt-auto">
+                <small class="text-muted">{{ a.date_creation|temps_ecoule }}</small>
+                <a href="{{ url_for('news.detail', id=a.id) }}"
+                   class="btn btn-sm btn-nc-primary">Lire</a>
+            </div>
+        </div>
+    </div>
+    {% else %}
+    <div class="col-12 text-center py-5">
+        <i class="fas fa-newspaper fa-3x text-muted mb-3"></i>
+        <p class="text-muted">Aucune actualité disponible.</p>
+    </div>
+    {% endfor %}
+</div>
+{% endblock %}

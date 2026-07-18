@@ -1,0 +1,428 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}NigerConnect{% endblock %} | NigerConnect</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --nc-green:   #0DB02B;
+            --nc-orange:  #E05206;
+            --nc-light:   #FFF9F5;
+            --nc-dark:    #1a1a2e;
+            --nc-gray:    #6c757d;
+            --nc-border:  #FFE4D6;
+            --nc-shadow:  0 4px 20px rgba(224,82,6,.08);
+        }
+        * { font-family: 'Poppins', sans-serif; }
+        body { background: var(--nc-light); color: #333; }
+
+        /* Navbar */
+        .navbar {
+            background: linear-gradient(135deg, var(--nc-green), #0a8a22);
+            box-shadow: 0 2px 15px rgba(0,0,0,.2);
+            padding: 12px 0;
+        }
+        .navbar-brand { font-weight: 700; font-size: 1.4rem; color: #fff !important; }
+        .navbar-brand span { color: var(--nc-orange); }
+        .nav-link { color: rgba(255,255,255,.9) !important; font-weight: 500; }
+        .nav-link:hover { color: var(--nc-orange) !important; }
+        .navbar-toggler { border-color: rgba(255,255,255,.5); }
+        .navbar-toggler-icon {
+            background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'%3e%3cpath stroke='white' stroke-width='2' d='M4 7h22M4 15h22M4 23h22'/%3e%3c/svg%3e");
+        }
+
+        /* Sidebar */
+        .sidebar {
+            position: fixed; left: 0; top: 70px;
+            width: 240px; height: calc(100vh - 70px);
+            background: #fff; box-shadow: 2px 0 15px rgba(0,0,0,.08);
+            overflow-y: auto; z-index: 100; padding: 16px 0;
+        }
+        .sidebar-link {
+            display: flex; align-items: center; gap: 10px;
+            padding: 10px 20px; color: #555; text-decoration: none;
+            font-size: .9rem; font-weight: 500;
+            border-left: 3px solid transparent;
+            transition: all .2s;
+        }
+        .sidebar-link:hover, .sidebar-link.active {
+            background: rgba(13,176,43,.08);
+            color: var(--nc-green);
+            border-left-color: var(--nc-green);
+        }
+        .sidebar-link i { width: 20px; text-align: center; font-size: 1rem; }
+        .sidebar-divider {
+            font-size: .7rem; font-weight: 600; color: var(--nc-gray);
+            text-transform: uppercase; letter-spacing: 1px;
+            padding: 12px 20px 4px;
+        }
+        .main-content {
+            margin-left: 240px;
+            padding: 24px;
+            min-height: calc(100vh - 70px);
+        }
+        @media (max-width: 991px) {
+            .sidebar { display: none; }
+            .main-content { margin-left: 0; padding: 16px; }
+        }
+
+        /* Cards */
+        .card {
+            border: none; border-radius: 16px;
+            box-shadow: var(--nc-shadow);
+            transition: transform .2s, box-shadow .2s;
+        }
+        .card:hover { transform: translateY(-3px); box-shadow: 0 8px 30px rgba(0,0,0,.12); }
+
+        /* Buttons */
+        .btn-nc-primary {
+            background: linear-gradient(135deg, var(--nc-green), #0a8a22);
+            color: #fff;
+            border: none;
+            border-radius: 10px;
+            font-weight: 600;
+            padding: 10px 24px;
+            transition: all .3s;
+            box-shadow: 0 4px 15px rgba(13,176,43,.25);
+        }
+        .btn-nc-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(13,176,43,.4);
+            color: #fff;
+        }
+        .btn-nc-orange {
+            background: linear-gradient(135deg, var(--nc-orange), #C04204);
+            color: #fff;
+            border: none;
+            border-radius: 10px;
+            font-weight: 600;
+            padding: 10px 24px;
+            transition: all .3s;
+            box-shadow: 0 4px 15px rgba(224,82,6,.25);
+        }
+        .btn-nc-orange:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(224,82,6,.4);
+            color: #fff;
+        }
+
+        /* Badges */
+        .badge-nc-green {
+            background: rgba(13,176,43,.12);
+            color: var(--nc-green);
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: .75rem;
+            font-weight: 600;
+            letter-spacing: .3px;
+            text-transform: uppercase;
+        }
+        .badge-nc-orange {
+            background: rgba(224,82,6,.12);
+            color: var(--nc-orange);
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: .75rem;
+            font-weight: 600;
+            letter-spacing: .3px;
+            text-transform: uppercase;
+        }
+        .badge-urgent {
+            background: linear-gradient(135deg, #e74c3c, #c0392b);
+            color: #fff;
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: .75rem;
+            font-weight: 600;
+            letter-spacing: .3px;
+            text-transform: uppercase;
+            animation: pulse 2s infinite;
+        }
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50%      { opacity: 0.7; }
+        }
+
+        /* Section title */
+        .section-title {
+            font-size: 1.5rem; font-weight: 700; color: var(--nc-dark);
+            margin-bottom: 4px;
+        }
+        .section-title::after {
+            content: ''; display: block; width: 50px; height: 3px;
+            background: var(--nc-orange); border-radius: 2px; margin-top: 6px;
+        }
+
+        /* Search bar */
+        .search-container {
+            background: linear-gradient(135deg, var(--nc-green), #0a8a22);
+            border-radius: 16px; padding: 24px; margin-bottom: 24px;
+        }
+        .search-container input, .search-container select {
+            border-radius: 10px; border: none;
+            padding: 12px 16px; font-size: 1rem;
+        }
+
+        /* Module cards */
+        .module-card {
+            background: #fff; border-radius: 16px;
+            padding: 24px; text-align: center;
+            box-shadow: var(--nc-shadow); cursor: pointer;
+            transition: all .2s; text-decoration: none;
+            display: block; color: #333;
+        }
+        .module-card:hover { transform: translateY(-5px); color: var(--nc-green); }
+        .module-icon {
+            width: 60px; height: 60px; border-radius: 50%;
+            display: flex; align-items: center; justify-content: center;
+            margin: 0 auto 12px; font-size: 1.5rem;
+        }
+
+        /* Stat cards */
+        .stat-card {
+            background: #fff; border-radius: 16px; padding: 20px;
+            box-shadow: var(--nc-shadow); text-align: center;
+        }
+        .stat-number { font-size: 2rem; font-weight: 700; color: var(--nc-green); }
+        .stat-label  { font-size: .85rem; color: var(--nc-gray); font-weight: 500; }
+
+        /* Alerts */
+        .alert-urgent {
+            background: linear-gradient(135deg, #e74c3c, #c0392b);
+            color: #fff; border-radius: 12px; padding: 14px 18px;
+            margin-bottom: 10px; border: none;
+        }
+
+        /* Footer */
+        .footer {
+            background: var(--nc-dark); color: rgba(255,255,255,.7);
+            padding: 30px 0; margin-top: 40px; font-size: .85rem;
+        }
+        .footer a { color: rgba(255,255,255,.7); text-decoration: none; }
+        .footer a:hover { color: var(--nc-orange); }
+
+        /* Forms */
+        .form-control, .form-select {
+            border-radius: 10px; border: 1.5px solid var(--nc-border);
+            padding: 10px 14px;
+        }
+        .form-control:focus, .form-select:focus {
+            border-color: var(--nc-green);
+            box-shadow: 0 0 0 3px rgba(13,176,43,.1);
+        }
+        .form-label { font-weight: 500; color: #444; margin-bottom: 6px; }
+
+        /* Prestataire */
+        .prestataire-card .note { color: #f39c12; }
+
+        /* Pagination */
+        .page-link { color: var(--nc-green); border-radius: 8px !important; margin: 0 2px; }
+        .page-item.active .page-link { background: var(--nc-green); border-color: var(--nc-green); }
+    </style>
+    {% block extra_css %}{% endblock %}
+</head>
+<body>
+
+<!-- ═══════════════ NAVBAR ═══════════════ -->
+<nav class="navbar navbar-expand-lg sticky-top">
+    <div class="container-fluid px-3">
+        <a class="navbar-brand d-flex align-items-center gap-2" href="{{ url_for('main.index') }}">
+            <img src="{{ url_for('static', filename='img/logo.svg') }}"
+                 alt="Logo" width="40" height="40"
+                 style="background: white; border-radius: 50%; padding: 2px;"
+                 onerror="this.style.display='none'">
+            <span>Niger<span style="color: #FFD700;">Connect</span></span>
+        </a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+                data-bs-target="#navMenu">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navMenu">
+            <ul class="navbar-nav ms-auto align-items-lg-center gap-1">
+                {% if current_user.is_authenticated %}
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ url_for('dashboard.index') }}">
+                        <i class="fas fa-home me-1"></i>Tableau de bord
+                    </a>
+                </li>
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown">
+                        <i class="fas fa-user-circle me-1"></i>
+                        {{ current_user.prenom }}
+                    </a>
+                    <ul class="dropdown-menu dropdown-menu-end">
+                        <li><a class="dropdown-item" href="{{ url_for('auth.profil') }}">
+                            <i class="fas fa-user me-2"></i>Mon profil</a></li>
+                        <li><hr class="dropdown-divider"></li>
+                        <li><a class="dropdown-item text-danger"
+                               href="{{ url_for('auth.deconnexion') }}">
+                            <i class="fas fa-sign-out-alt me-2"></i>Déconnexion</a></li>
+                    </ul>
+                </li>
+                {% else %}
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ url_for('auth.connexion') }}">Connexion</a>
+                </li>
+                <li class="nav-item">
+                    <a class="btn btn-nc-orange btn-sm ms-2 px-3"
+                       href="{{ url_for('auth.inscription') }}">S'inscrire</a>
+                </li>
+                {% endif %}
+            </ul>
+        </div>
+    </div>
+</nav>
+
+<div class="d-flex">
+    <!-- ═══════════════ SIDEBAR ═══════════════ -->
+    {% if current_user.is_authenticated %}
+    {% set endpoint = request.endpoint or '' %}
+    <nav class="sidebar d-none d-lg-block">
+        <div class="sidebar-divider">Principal</div>
+        <a href="{{ url_for('dashboard.index') }}"
+           class="sidebar-link {% if endpoint == 'dashboard.index' %}active{% endif %}">
+            <i class="fas fa-home"></i> Tableau de bord
+        </a>
+        <a href="{{ url_for('news.index') }}"
+           class="sidebar-link {% if 'news' in endpoint %}active{% endif %}">
+            <i class="fas fa-bell"></i> Actualités
+        </a>
+
+        <div class="sidebar-divider">Services</div>
+        <a href="{{ url_for('annuaire.index') }}"
+           class="sidebar-link {% if 'annuaire' in endpoint %}active{% endif %}">
+            <i class="fas fa-book"></i> Annuaire
+        </a>
+        <a href="{{ url_for('marketplace.index') }}"
+           class="sidebar-link {% if 'marketplace' in endpoint %}active{% endif %}">
+            <i class="fas fa-store"></i> Marché
+        </a>
+        <a href="{{ url_for('services.index') }}"
+           class="sidebar-link {% if 'services' in endpoint %}active{% endif %}">
+            <i class="fas fa-tools"></i> Artisans
+        </a>
+        <a href="{{ url_for('transport.index') }}"
+           class="sidebar-link {% if 'transport' in endpoint %}active{% endif %}">
+            <i class="fas fa-bus"></i> Transport
+        </a>
+        <a href="{{ url_for('payments.index') }}"
+           class="sidebar-link {% if 'payments' in endpoint %}active{% endif %}">
+            <i class="fas fa-mobile-alt"></i> Paiements
+        </a>
+
+        <div class="sidebar-divider">Bien-être</div>
+        <a href="{{ url_for('health.index') }}"
+           class="sidebar-link {% if 'health' in endpoint %}active{% endif %}">
+            <i class="fas fa-heartbeat"></i> Santé
+        </a>
+        <a href="{{ url_for('jobs.index') }}"
+           class="sidebar-link {% if 'jobs' in endpoint %}active{% endif %}">
+            <i class="fas fa-briefcase"></i> Emploi
+        </a>
+        <a href="{{ url_for('agriculture.index') }}"
+           class="sidebar-link {% if 'agriculture' in endpoint %}active{% endif %}">
+            <i class="fas fa-leaf"></i> Agriculture
+        </a>
+        <a href="{{ url_for('admin_services.index') }}"
+           class="sidebar-link {% if 'admin_services' in endpoint %}active{% endif %}">
+            <i class="fas fa-landmark"></i> Administration
+        </a>
+
+        <div class="sidebar-divider">IA</div>
+        <a href="{{ url_for('ai.index') }}"
+           class="sidebar-link {% if 'ai' in endpoint %}active{% endif %}">
+            <i class="fas fa-robot"></i> Assistant IA
+        </a>
+    </nav>
+    {% endif %}
+
+    <!-- ═══════════════ CONTENU PRINCIPAL ═══════════════ -->
+    <main class="{% if current_user.is_authenticated %}main-content{% else %}container-fluid p-0{% endif %} flex-grow-1">
+
+        <!-- Flash messages -->
+        {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+        <div class="{% if current_user.is_authenticated %}{% else %}container{% endif %} mt-3">
+            {% for category, message in messages %}
+            <div class="alert alert-{{ 'danger' if category == 'danger' else 'success' if category == 'success' else 'warning' if category == 'warning' else 'info' }} alert-dismissible fade show" role="alert">
+                {{ message }}
+                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+            </div>
+            {% endfor %}
+        </div>
+        {% endif %}
+        {% endwith %}
+
+        {% block content %}{% endblock %}
+    </main>
+</div>
+
+<!-- ═══════════════ FOOTER ═══════════════ -->
+<footer class="footer">
+    <div class="container">
+        <div class="row g-4">
+            <div class="col-md-4">
+                <div class="d-flex align-items-center gap-2 mb-3">
+                    <img src="{{ url_for('static', filename='img/logo.svg') }}"
+                         alt="Logo" width="40" height="40"
+                         style="background:white;border-radius:50%;padding:2px;"
+                         onerror="this.style.display='none'">
+                    <h5 class="text-white fw-bold mb-0">NigerConnect</h5>
+                </div>
+                <p class="small">
+                    La Super Application du Niger. Tous les services du quotidien
+                    dans une seule application, adaptée aux réalités locales.
+                </p>
+            </div>
+            <div class="col-md-2 col-6">
+                <h6 class="text-white fw-bold mb-3">Services</h6>
+                <ul class="list-unstyled small">
+                    <li class="mb-2"><a href="{{ url_for('annuaire.index') }}">Annuaire</a></li>
+                    <li class="mb-2"><a href="{{ url_for('marketplace.index') }}">Marché</a></li>
+                    <li class="mb-2"><a href="{{ url_for('services.index') }}">Artisans</a></li>
+                    <li class="mb-2"><a href="{{ url_for('jobs.index') }}">Emploi</a></li>
+                </ul>
+            </div>
+            <div class="col-md-2 col-6">
+                <h6 class="text-white fw-bold mb-3">Bien-être</h6>
+                <ul class="list-unstyled small">
+                    <li class="mb-2"><a href="{{ url_for('health.index') }}">Santé</a></li>
+                    <li class="mb-2"><a href="{{ url_for('agriculture.index') }}">Agriculture</a></li>
+                    <li class="mb-2"><a href="{{ url_for('transport.index') }}">Transport</a></li>
+                    <li class="mb-2"><a href="{{ url_for('news.index') }}">Actualités</a></li>
+                </ul>
+            </div>
+            <div class="col-md-4">
+                <h6 class="text-white fw-bold mb-3">Contact</h6>
+                <p class="small mb-2">
+                    <i class="fas fa-envelope me-2" style="color:#E05206;"></i>
+                    contact@nigerconnect.ne
+                </p>
+                <p class="small mb-2">
+                    <i class="fas fa-phone me-2" style="color:#E05206;"></i>
+                    +227 XX XX XX XX
+                </p>
+                <p class="small mb-2">
+                    <i class="fas fa-map-marker-alt me-2" style="color:#E05206;"></i>
+                    Niamey, République du Niger
+                </p>
+                <p class="small mt-3" style="opacity:.7;">
+                    🇳🇪 Fait avec ❤️ au Niger
+                </p>
+            </div>
+        </div>
+        <hr style="border-color:rgba(255,255,255,.1); margin:30px 0 20px;">
+        <p class="text-center small mb-0" style="opacity:.7;">
+            © 2024 NigerConnect. Tous droits réservés. Version 1.0.0
+        </p>
+    </div>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+{% block extra_js %}{% endblock %}
+</body>
+</html>

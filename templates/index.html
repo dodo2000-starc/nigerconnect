@@ -1,0 +1,399 @@
+{% extends "base.html" %}
+{% block title %}Accueil - La Super App du Niger{% endblock %}
+
+{% block extra_css %}
+<style>
+    /* Animation d'apparition */
+    @keyframes fadeInUp {
+        from { opacity: 0; transform: translateY(30px); }
+        to   { opacity: 1; transform: translateY(0); }
+    }
+    .animate-in {
+        animation: fadeInUp 0.8s ease-out forwards;
+    }
+
+    /* Hero avec pattern */
+    .hero-section {
+        background: linear-gradient(135deg, #0DB02B 0%, #0a8a22 100%);
+        color: white;
+        padding: 80px 0 100px;
+        position: relative;
+        overflow: hidden;
+    }
+    .hero-section::before {
+        content: '';
+        position: absolute;
+        top: 0; left: 0; right: 0; bottom: 0;
+        background-image:
+            radial-gradient(circle at 20% 30%, rgba(255,255,255,.1) 2px, transparent 2px),
+            radial-gradient(circle at 80% 70%, rgba(255,215,0,.1) 3px, transparent 3px);
+        background-size: 60px 60px;
+        opacity: 0.5;
+    }
+    .hero-content {
+        position: relative;
+        z-index: 2;
+    }
+
+    /* Badge flottant */
+    .floating-badge {
+        display: inline-block;
+        background: rgba(255,255,255,.15);
+        backdrop-filter: blur(10px);
+        border: 1px solid rgba(255,255,255,.3);
+        border-radius: 50px;
+        padding: 8px 20px;
+        font-size: 0.9rem;
+        font-weight: 500;
+        margin-bottom: 20px;
+        animation: float 3s ease-in-out infinite;
+    }
+    @keyframes float {
+        0%, 100% { transform: translateY(0); }
+        50%      { transform: translateY(-8px); }
+    }
+
+    /* Titre principal */
+    .hero-title {
+        font-size: 3.5rem;
+        font-weight: 800;
+        margin-bottom: 20px;
+        line-height: 1.1;
+    }
+    .hero-title .highlight {
+        color: #FFD700;
+        position: relative;
+    }
+    .hero-title .highlight::after {
+        content: '';
+        position: absolute;
+        bottom: -5px;
+        left: 0; right: 0;
+        height: 4px;
+        background: #E05206;
+        border-radius: 2px;
+    }
+    @media (max-width: 768px) {
+        .hero-title { font-size: 2.2rem; }
+    }
+
+    /* Modules avec effet 3D */
+    .module-card-v2 {
+        background: white;
+        border-radius: 20px;
+        padding: 25px 15px;
+        text-align: center;
+        text-decoration: none;
+        color: #333;
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        border: 2px solid transparent;
+        display: block;
+        height: 100%;
+    }
+    .module-card-v2:hover {
+        transform: translateY(-8px);
+        border-color: var(--nc-orange);
+        box-shadow: 0 15px 40px rgba(224,82,6,.15);
+        color: var(--nc-orange);
+    }
+    .module-icon-v2 {
+        width: 70px;
+        height: 70px;
+        border-radius: 20px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: 0 auto 15px;
+        font-size: 1.8rem;
+        transition: all 0.3s;
+    }
+    .module-card-v2:hover .module-icon-v2 {
+        transform: scale(1.1) rotate(-5deg);
+    }
+    .module-title-v2 {
+        font-weight: 700;
+        font-size: 0.95rem;
+        margin-bottom: 5px;
+    }
+    .module-desc-v2 {
+        font-size: 0.75rem;
+        color: #888;
+    }
+
+    /* Statistiques */
+    .stats-section {
+        background: white;
+        padding: 60px 0;
+    }
+    .stat-item {
+        text-align: center;
+        padding: 20px;
+    }
+    .stat-icon {
+        width: 60px;
+        height: 60px;
+        border-radius: 15px;
+        background: linear-gradient(135deg, #0DB02B, #E05206);
+        color: white;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.5rem;
+        margin: 0 auto 15px;
+    }
+    .stat-value {
+        font-size: 2.5rem;
+        font-weight: 800;
+        background: linear-gradient(135deg, #0DB02B, #E05206);
+        -webkit-background-clip: text;
+        background-clip: text;
+        color: transparent;
+    }
+    .stat-label {
+        color: #666;
+        font-weight: 500;
+    }
+
+    /* Section pourquoi */
+    .why-section {
+        background: linear-gradient(135deg, #FFF9F5, #FFF);
+        padding: 80px 0;
+    }
+    .why-card {
+        background: white;
+        border-radius: 20px;
+        padding: 30px;
+        height: 100%;
+        border-left: 4px solid var(--nc-orange);
+        transition: all 0.3s;
+    }
+    .why-card:hover {
+        transform: translateX(5px);
+        box-shadow: 0 10px 30px rgba(0,0,0,.08);
+    }
+    .why-icon {
+        width: 50px;
+        height: 50px;
+        border-radius: 12px;
+        background: rgba(224,82,6,.1);
+        color: var(--nc-orange);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.3rem;
+        margin-bottom: 15px;
+    }
+
+    /* CTA Final */
+    .cta-section {
+        background: linear-gradient(135deg, #E05206, #C04204);
+        color: white;
+        padding: 80px 0;
+        text-align: center;
+    }
+    .btn-white {
+        background: white;
+        color: var(--nc-orange);
+        border: none;
+        border-radius: 12px;
+        padding: 14px 32px;
+        font-weight: 700;
+        font-size: 1.1rem;
+        transition: all 0.3s;
+        text-decoration: none;
+        display: inline-block;
+    }
+    .btn-white:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 10px 30px rgba(0,0,0,.3);
+        color: var(--nc-orange);
+    }
+    .btn-outline-white {
+        background: transparent;
+        color: white;
+        border: 2px solid white;
+        border-radius: 12px;
+        padding: 12px 30px;
+        font-weight: 600;
+        transition: all 0.3s;
+        text-decoration: none;
+        display: inline-block;
+    }
+    .btn-outline-white:hover {
+        background: white;
+        color: var(--nc-orange);
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+
+<!-- ═══════════════════ HERO ═══════════════════ -->
+<section class="hero-section">
+    <div class="container hero-content text-center">
+        <div class="animate-in">
+            <div class="floating-badge">
+                🇳🇪 La Super Application du Niger
+            </div>
+
+            <h1 class="hero-title">
+                Tous les services du Niger<br>
+                dans <span class="highlight">une seule app</span>
+            </h1>
+
+            <p class="lead mb-4" style="max-width: 650px; margin: 0 auto 30px; opacity: 0.95;">
+                Annuaire · Marché · Artisans · Transport · Santé · Emploi ·
+                Agriculture · Paiements · Administration · Assistant IA
+            </p>
+
+            <div class="d-flex gap-3 justify-content-center flex-wrap">
+                <a href="{{ url_for('auth.inscription') }}" class="btn-white">
+                    <i class="fas fa-rocket me-2"></i>Commencer gratuitement
+                </a>
+                <a href="{{ url_for('auth.connexion') }}" class="btn-outline-white">
+                    <i class="fas fa-sign-in-alt me-2"></i>Se connecter
+                </a>
+            </div>
+
+            <!-- Petits chiffres rassurants -->
+            <div class="d-flex gap-4 justify-content-center flex-wrap mt-5">
+                <div>
+                    <div style="font-size:1.8rem;font-weight:700;">100%</div>
+                    <div style="opacity:.8;font-size:.85rem;">Gratuit</div>
+                </div>
+                <div style="border-left:1px solid rgba(255,255,255,.3);"></div>
+                <div>
+                    <div style="font-size:1.8rem;font-weight:700;">11+</div>
+                    <div style="opacity:.8;font-size:.85rem;">Services</div>
+                </div>
+                <div style="border-left:1px solid rgba(255,255,255,.3);"></div>
+                <div>
+                    <div style="font-size:1.8rem;font-weight:700;">8</div>
+                    <div style="opacity:.8;font-size:.85rem;">Régions</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ═══════════════════ MODULES ═══════════════════ -->
+<section class="py-5" style="background: #FFF9F5;">
+    <div class="container">
+        <div class="text-center mb-5">
+            <span class="badge-nc-orange">NOS SERVICES</span>
+            <h2 class="fw-bold mt-2 mb-2">Tout ce dont vous avez besoin</h2>
+            <p class="text-muted">11 modules pour simplifier votre quotidien</p>
+        </div>
+
+        <div class="row g-3">
+            {% set modules = [
+                ('annuaire.index',       'fas fa-book',        '#0DB02B', 'Annuaire',       'Pharmacies, hôtels, restaurants'),
+                ('marketplace.index',    'fas fa-store',       '#E05206', 'Marché',         'Achetez et vendez'),
+                ('services.index',       'fas fa-tools',       '#3498db', 'Artisans',       'Plombiers, électriciens'),
+                ('transport.index',      'fas fa-bus',         '#9b59b6', 'Transport',      'Billets et livraisons'),
+                ('payments.index',       'fas fa-mobile-alt',  '#1abc9c', 'Paiements',      'Mobile money'),
+                ('health.index',         'fas fa-heartbeat',   '#e74c3c', 'Santé',          'Hôpitaux et RDV'),
+                ('jobs.index',           'fas fa-briefcase',   '#f39c12', 'Emploi',         'Offres et stages'),
+                ('agriculture.index',    'fas fa-leaf',        '#27ae60', 'Agriculture',    'Prix des marchés'),
+                ('admin_services.index', 'fas fa-landmark',    '#2c3e50', 'Administration', 'Démarches'),
+                ('news.index',           'fas fa-newspaper',   '#c0392b', 'Actualités',     'Infos et alertes'),
+                ('ai.index',             'fas fa-robot',       '#8e44ad', 'Assistant IA',   'Réponses instantanées'),
+            ] %}
+            {% for endpoint, icon, color, titre, desc in modules %}
+            <div class="col-6 col-md-4 col-lg-3">
+                <a href="{{ url_for(endpoint) }}" class="module-card-v2">
+                    <div class="module-icon-v2" style="background:{{ color }}15;">
+                        <i class="{{ icon }}" style="color:{{ color }};"></i>
+                    </div>
+                    <div class="module-title-v2">{{ titre }}</div>
+                    <div class="module-desc-v2">{{ desc }}</div>
+                </a>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+
+<!-- ═══════════════════ STATISTIQUES ═══════════════════ -->
+<section class="stats-section">
+    <div class="container">
+        <div class="row">
+            {% for icon, value, label in [
+                ('fas fa-building', '500+',  'Entreprises'),
+                ('fas fa-tools',    '1200+', 'Artisans'),
+                ('fas fa-users',    '3000+', 'Utilisateurs'),
+                ('fas fa-map',      '8',     'Régions couvertes')
+            ] %}
+            <div class="col-6 col-md-3">
+                <div class="stat-item">
+                    <div class="stat-icon">
+                        <i class="{{ icon }}"></i>
+                    </div>
+                    <div class="stat-value">{{ value }}</div>
+                    <div class="stat-label">{{ label }}</div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+
+<!-- ═══════════════════ POURQUOI ═══════════════════ -->
+<section class="why-section">
+    <div class="container">
+        <div class="text-center mb-5">
+            <span class="badge-nc-orange">POURQUOI NIGERCONNECT ?</span>
+            <h2 class="fw-bold mt-2 mb-2">Une révolution digitale pour le Niger</h2>
+            <p class="text-muted">Conçue pour les réalités locales</p>
+        </div>
+
+        <div class="row g-4">
+            {% for icon, titre, desc in [
+                ('fas fa-wifi', 'Fonctionne avec faible connexion',
+                 'Optimisée pour les connexions 2G/3G du Niger. Chaque page se charge rapidement.'),
+                ('fas fa-mobile-alt', 'Mobile Money intégré',
+                 'Orange Money, Airtel, Moov. Payez et recevez de l\'argent facilement.'),
+                ('fas fa-language', 'Interface en français',
+                 'Bientôt disponible en Haoussa, Zarma, et Fulfuldé pour tous les Nigériens.'),
+                ('fas fa-shield-alt', 'Sécurisé et privé',
+                 'Vos données sont protégées. Nous respectons votre vie privée.'),
+                ('fas fa-map-marker-alt', '100% local',
+                 'Entreprises, artisans, produits du Niger. Soutenez l\'économie locale.'),
+                ('fas fa-robot', 'Assistant IA gratuit',
+                 'Posez vos questions et obtenez des réponses instantanées 24h/24.')
+            ] %}
+            <div class="col-md-6 col-lg-4">
+                <div class="why-card">
+                    <div class="why-icon">
+                        <i class="{{ icon }}"></i>
+                    </div>
+                    <h5 class="fw-bold mb-2">{{ titre }}</h5>
+                    <p class="text-muted mb-0" style="font-size:.9rem;">{{ desc }}</p>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+
+<!-- ═══════════════════ CTA FINAL ═══════════════════ -->
+<section class="cta-section">
+    <div class="container">
+        <h2 class="fw-bold mb-3" style="font-size: 2.5rem;">
+            Prêt à rejoindre NigerConnect ?
+        </h2>
+        <p class="lead mb-4" style="opacity:.95;">
+            Créez votre compte gratuit en 30 secondes et accédez à tous les services
+        </p>
+        <div class="d-flex gap-3 justify-content-center flex-wrap">
+            <a href="{{ url_for('auth.inscription') }}" class="btn-white">
+                <i class="fas fa-user-plus me-2"></i>Créer mon compte
+            </a>
+            <a href="{{ url_for('ai.index') }}" class="btn-outline-white">
+                <i class="fas fa-robot me-2"></i>Tester l'Assistant IA
+            </a>
+        </div>
+    </div>
+</section>
+
+{% endblock %}

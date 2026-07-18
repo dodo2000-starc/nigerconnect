@@ -1,0 +1,73 @@
+{% extends "base.html" %}
+{% block title %}Inscription{% endblock %}
+{% block content %}
+<div class="container py-4" style="max-width:560px;">
+    <div class="card p-4">
+        <div class="text-center mb-4">
+            <h4 class="fw-bold">Créer votre compte</h4>
+            <p class="text-muted small">Rejoignez des milliers de Nigériens sur NigerConnect</p>
+        </div>
+        <form method="POST">
+            <div class="row g-3">
+                <div class="col-md-6">
+                    <label class="form-label">Nom *</label>
+                    <input type="text" class="form-control" name="nom"
+                           placeholder="Votre nom" required>
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label">Prénom *</label>
+                    <input type="text" class="form-control" name="prenom"
+                           placeholder="Votre prénom" required>
+                </div>
+                <div class="col-12">
+                    <label class="form-label">Téléphone *</label>
+                    <input type="text" class="form-control" name="telephone"
+                           placeholder="Ex: 90000000" required>
+                </div>
+                <div class="col-12">
+                    <label class="form-label">Email (optionnel)</label>
+                    <input type="email" class="form-control" name="email"
+                           placeholder="votre@email.com">
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label">Type de compte</label>
+                    <select class="form-select" name="type_compte">
+                        {% for t in ['citoyen','entreprise','artisan','ong','ecole','hopital'] %}
+                        <option value="{{ t }}">{{ t|capitalize }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label">Ville</label>
+                    <select class="form-select" name="ville">
+                        {% for v in ['Niamey','Zinder','Maradi','Tahoua','Agadez','Dosso','Tillabéri','Diffa'] %}
+                        <option value="{{ v }}">{{ v }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label">Mot de passe *</label>
+                    <input type="password" class="form-control" name="password"
+                           placeholder="Min. 6 caractères" required minlength="6">
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label">Confirmer *</label>
+                    <input type="password" class="form-control" name="confirm_password"
+                           placeholder="Répétez le mot de passe" required>
+                </div>
+                <div class="col-12">
+                    <button type="submit" class="btn btn-nc-primary w-100">
+                        <i class="fas fa-user-plus me-2"></i>Créer mon compte
+                    </button>
+                </div>
+            </div>
+        </form>
+        <hr>
+        <p class="text-center small mb-0">
+            Déjà inscrit ?
+            <a href="{{ url_for('auth.connexion') }}" class="fw-semibold"
+               style="color:#1a7a4a;">Se connecter</a>
+        </p>
+    </div>
+</div>
+{% endblock %}

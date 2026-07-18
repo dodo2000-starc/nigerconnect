@@ -1,0 +1,99 @@
+{% extends "base.html" %}
+{% block title %}Transport{% endblock %}
+{% block content %}
+<div class="search-container">
+    <h4 class="text-white fw-bold mb-3">
+        <i class="fas fa-bus me-2"></i>Transport
+    </h4>
+    <form method="GET">
+        <div class="row g-2">
+            <div class="col-md-3">
+                <select class="form-select" name="depart">
+                    <option value="">Départ</option>
+                    {% for v in villes %}
+                    <option value="{{ v }}" {{ 'selected' if v == depart }}>{{ v }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="col-md-3">
+                <select class="form-select" name="destination">
+                    <option value="">Destination</option>
+                    {% for v in villes %}
+                    <option value="{{ v }}" {{ 'selected' if v == destination }}>{{ v }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="col-md-3">
+                <input type="date" class="form-control" name="date" value="{{ date }}">
+            </div>
+            <div class="col-md-3">
+                <button type="submit" class="btn w-100"
+                        style="background:#e67e22;color:#fff;border-radius:10px;">
+                    <i class="fas fa-search me-1"></i>Rechercher
+                </button>
+            </div>
+        </div>
+    </form>
+</div>
+
+<div class="row g-3 mb-4">
+    <div class="col-md-4">
+        <a href="{{ url_for('transport.ajouter_trajet') }}"
+           class="module-card text-center p-3">
+            <i class="fas fa-plus-circle fa-2x mb-2" style="color:#9b59b6;"></i>
+            <div class="fw-bold small">Ajouter un trajet</div>
+        </a>
+    </div>
+    <div class="col-md-4">
+        <a href="{{ url_for('transport.livraison') }}"
+           class="module-card text-center p-3">
+            <i class="fas fa-box fa-2x mb-2" style="color:#e67e22;"></i>
+            <div class="fw-bold small">Livraison de colis</div>
+        </a>
+    </div>
+    <div class="col-md-4">
+        <a href="{{ url_for('transport.suivi') }}"
+           class="module-card text-center p-3">
+            <i class="fas fa-map-marked-alt fa-2x mb-2" style="color:#1abc9c;"></i>
+            <div class="fw-bold small">Suivre un colis</div>
+        </a>
+    </div>
+</div>
+
+<h5 class="fw-bold mb-3">Trajets disponibles ({{ trajets.total }})</h5>
+<div class="row g-3">
+    {% for t in trajets.items %}
+    <div class="col-md-6">
+        <div class="card p-3">
+            <div class="d-flex justify-content-between align-items-start mb-2">
+                <span class="badge-nc-green">{{ t.type_transport|capitalize }}</span>
+                <span class="fw-bold" style="color:#1a7a4a;">{{ t.prix|prix_format }}</span>
+            </div>
+            <div class="d-flex align-items-center gap-2 mb-2">
+                <span class="fw-bold">{{ t.depart }}</span>
+                <i class="fas fa-arrow-right text-muted"></i>
+                <span class="fw-bold">{{ t.destination }}</span>
+            </div>
+            <div class="text-muted small mb-2">
+                <i class="fas fa-calendar me-1"></i>
+                {{ t.date_depart.strftime('%d/%m/%Y à %H:%M') }}<br>
+                <i class="fas fa-bus me-1"></i>{{ t.compagnie }}
+                {% if t.places_dispo is not none %}
+                · {{ t.places_dispo }} place(s)
+                {% endif %}
+            </div>
+            {% if t.telephone %}
+            <a href="tel:{{ t.telephone }}" class="btn btn-nc-primary btn-sm">
+                <i class="fas fa-phone me-1"></i>Réserver
+            </a>
+            {% endif %}
+        </div>
+    </div>
+    {% else %}
+    <div class="col-12 text-center py-4 text-muted">
+        <i class="fas fa-bus fa-3x mb-3"></i>
+        <p>Aucun trajet disponible.</p>
+    </div>
+    {% endfor %}
+</div>
+{% endblock %}

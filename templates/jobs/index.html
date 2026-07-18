@@ -1,0 +1,99 @@
+{% extends "base.html" %}
+{% block title %}Emploi{% endblock %}
+{% block content %}
+<div class="search-container">
+    <h4 class="text-white fw-bold mb-3">
+        <i class="fas fa-briefcase me-2"></i>Offres d'emploi
+    </h4>
+    <form method="GET">
+        <div class="row g-2">
+            <div class="col-md-4">
+                <input type="text" class="form-control" name="q"
+                       value="{{ recherche }}" placeholder="Titre, entreprise, description...">
+            </div>
+            <div class="col-md-2">
+                <select class="form-select" name="secteur">
+                    <option value="">Secteur</option>
+                    {% for s in secteurs %}
+                    <option value="{{ s }}" {{ 'selected' if s == secteur_actif }}>{{ s }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="col-md-2">
+                <select class="form-select" name="contrat">
+                    <option value="">Contrat</option>
+                    {% for t in types_contrat %}
+                    <option value="{{ t }}" {{ 'selected' if t == contrat_actif }}>{{ t }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="col-md-2">
+                <select class="form-select" name="ville">
+                    <option value="">Ville</option>
+                    {% for v in villes %}
+                    <option value="{{ v }}" {{ 'selected' if v == ville_active }}>{{ v }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="col-md-2">
+                <button type="submit" class="btn w-100"
+                        style="background:#e67e22;color:#fff;border-radius:10px;">
+                    <i class="fas fa-search"></i>
+                </button>
+            </div>
+        </div>
+    </form>
+</div>
+
+<div class="d-flex justify-content-between align-items-center mb-3">
+    <h5 class="fw-bold">{{ offres.total }} offre(s)</h5>
+    <a href="{{ url_for('jobs.publier') }}" class="btn btn-nc-primary btn-sm">
+        <i class="fas fa-plus me-1"></i>Publier une offre
+    </a>
+</div>
+
+<div class="row g-3">
+    {% for o in offres.items %}
+    <div class="col-12">
+        <div class="card p-3">
+            <div class="row align-items-center">
+                <div class="col-md-8">
+                    <div class="d-flex gap-2 flex-wrap mb-1">
+                        <span class="badge-nc-green">{{ o.secteur or 'Autre' }}</span>
+                        <span class="badge-nc-orange">{{ o.type_contrat or 'CDI' }}</span>
+                    </div>
+                    <h6 class="fw-bold mb-1">{{ o.titre }}</h6>
+                    <div class="text-muted small">
+                        {% if o.entreprise %}
+                        <i class="fas fa-building me-1"></i>{{ o.entreprise }} ·
+                        {% endif %}
+                        <i class="fas fa-map-marker-alt me-1"></i>{{ o.ville }}
+                        {% if o.salaire_min %}
+                        · <i class="fas fa-money-bill me-1"></i>
+                        {{ o.salaire_min|int|prix_format }}
+                        {% if o.salaire_max %} - {{ o.salaire_max|int|prix_format }}{% endif %}
+                        {% endif %}
+                    </div>
+                </div>
+                <div class="col-md-4 text-md-end mt-2 mt-md-0">
+                    <div class="text-muted small mb-2">
+                        {{ o.date_creation|temps_ecoule }}
+                        <br>{{ o.nb_vues }} vues
+                    </div>
+                    <a href="{{ url_for('jobs.detail', id=o.id) }}"
+                       class="btn btn-nc-primary btn-sm">Voir l'offre</a>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% else %}
+    <div class="col-12 text-center py-5">
+        <i class="fas fa-briefcase fa-3x text-muted mb-3"></i>
+        <p class="text-muted">Aucune offre disponible.</p>
+        <a href="{{ url_for('jobs.publier') }}" class="btn btn-nc-primary">
+            Publier la première offre
+        </a>
+    </div>
+    {% endfor %}
+</div>
+{% endblock %}

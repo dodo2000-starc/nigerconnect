@@ -1,0 +1,100 @@
+{% extends "base.html" %}
+{% block title %}Santé{% endblock %}
+{% block content %}
+<div class="search-container">
+    <h4 class="text-white fw-bold mb-3">
+        <i class="fas fa-heartbeat me-2"></i>Santé
+    </h4>
+    <form method="GET">
+        <div class="row g-2">
+            <div class="col-md-4">
+                <select class="form-select" name="type">
+                    <option value="">Tous les établissements</option>
+                    {% for t in types_etab %}
+                    <option value="{{ t }}" {{ 'selected' if t == type_actif }}>
+                        {{ t|capitalize }}
+                    </option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="col-md-3">
+                <select class="form-select" name="ville">
+                    <option value="">Toutes les villes</option>
+                    {% for v in villes %}
+                    <option value="{{ v }}" {{ 'selected' if v == ville_active }}>{{ v }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="col-md-3">
+                <select class="form-select" name="urgences">
+                    <option value="">Tous</option>
+                    <option value="1">Urgences 24h/24</option>
+                </select>
+            </div>
+            <div class="col-md-2">
+                <button type="submit" class="btn w-100"
+                        style="background:#e67e22;color:#fff;border-radius:10px;">
+                    <i class="fas fa-search"></i>
+                </button>
+            </div>
+        </div>
+    </form>
+</div>
+
+<!-- Numéros d'urgence -->
+<div class="row g-2 mb-4">
+    {% for num, label, color in [
+        ('15',    'SAMU',     '#e74c3c'),
+        ('18',    'Pompiers', '#e67e22'),
+        ('17',    'Police',   '#3498db'),
+        ('2272',  'Gendarmerie','#2c3e50')
+    ] %}
+    <div class="col-6 col-md-3">
+        <div class="card p-3 text-center" style="border-left:4px solid {{ color }};">
+            <div style="font-size:1.5rem; font-weight:800; color:{{ color }};">{{ num }}</div>
+            <div class="text-muted small">{{ label }}</div>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+
+<div class="row g-3">
+    {% for e in etablissements.items %}
+    <div class="col-md-6 col-lg-4">
+        <div class="card p-3 h-100">
+            <div class="d-flex justify-content-between mb-2">
+                <span class="badge-nc-green">{{ e.type_etab|capitalize }}</span>
+                {% if e.urgences %}
+                <span class="badge-urgent">🚨 Urgences</span>
+                {% endif %}
+            </div>
+            <h6 class="fw-bold">{{ e.nom }}</h6>
+            <div class="text-muted small mb-3">
+                <i class="fas fa-map-marker-alt me-1"></i>
+                {{ e.quartier or '' }}{% if e.quartier %}, {% endif %}{{ e.ville }}<br>
+                {% if e.telephone %}
+                <i class="fas fa-phone me-1"></i>{{ e.telephone }}
+                {% endif %}
+                {% if e.horaires %}
+                <br><i class="fas fa-clock me-1"></i>{{ e.horaires }}
+                {% endif %}
+            </div>
+            <div class="d-flex gap-2 mt-auto">
+                <a href="{{ url_for('health.detail', id=e.id) }}"
+                   class="btn btn-sm btn-nc-primary flex-grow-1">Détails / RDV</a>
+                {% if e.telephone %}
+                <a href="tel:{{ e.telephone }}" class="btn btn-sm btn-outline-success">
+                    <i class="fas fa-phone"></i>
+                </a>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+    {% else %}
+    <div class="col-12 text-center py-5">
+        <i class="fas fa-hospital fa-3x text-muted mb-3"></i>
+        <p class="text-muted">Aucun établissement trouvé.</p>
+    </div>
+    {% endfor %}
+</div>
+{% endblock %}

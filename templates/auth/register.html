@@ -1,0 +1,104 @@
+<!-- templates/auth/register.html -->
+{% extends "base.html" %}
+{% block title %}Inscription{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-md-7">
+            <div class="card border-0 shadow-sm" style="border-radius: 20px;">
+                <div class="card-body p-4">
+                    <div class="text-center mb-4">
+                        <h3 class="fw-bold" style="color: var(--nc-primary);">🇳🇪 Créer un compte</h3>
+                        <p class="text-muted">Rejoignez la communauté NigerConnect</p>
+                    </div>
+                    
+                    <form method="POST">
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label fw-semibold">Prénom</label>
+                                <input type="text" class="form-control" name="first_name" placeholder="Votre prénom">
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label fw-semibold">Nom</label>
+                                <input type="text" class="form-control" name="last_name" placeholder="Votre nom">
+                            </div>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label class="form-label fw-semibold">Nom d'utilisateur *</label>
+                            <input type="text" class="form-control" name="username" 
+                                   placeholder="Choisissez un nom d'utilisateur" required minlength="3">
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label class="form-label fw-semibold">Numéro de téléphone *</label>
+                            <div class="input-group">
+                                <span class="input-group-text">+227</span>
+                                <input type="tel" class="form-control" name="phone" 
+                                       placeholder="90 12 34 56" required>
+                            </div>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label class="form-label fw-semibold">Email (optionnel)</label>
+                            <input type="email" class="form-control" name="email" placeholder="votre@email.com">
+                        </div>
+                        
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label fw-semibold">Région</label>
+                                <select class="form-select" name="region">
+                                    <option value="Niamey">Niamey</option>
+                                    <option value="Agadez">Agadez</option>
+                                    <option value="Diffa">Diffa</option>
+                                    <option value="Dosso">Dosso</option>
+                                    <option value="Maradi">Maradi</option>
+                                    <option value="Tahoua">Tahoua</option>
+                                    <option value="Tillabéri">Tillabéri</option>
+                                    <option value="Zinder">Zinder</option>
+                                </select>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label fw-semibold">Type de compte</label>
+                                <select class="form-select" name="user_type">
+                                    <option value="citoyen">Citoyen</option>
+                                    <option value="entreprise">Entreprise</option>
+                                    <option value="commercant">Commerçant</option>
+                                    <option value="artisan">Artisan</option>
+                                    <option value="ong">ONG</option>
+                                </select>
+                            </div>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label class="form-label fw-semibold">Mot de passe *</label>
+                            <input type="password" class="form-control" name="password" 
+                                   placeholder="Minimum 6 caractères" required minlength="6">
+                        </div>
+                        
+                        <div class="mb-4">
+                            <label class="form-label fw-semibold">Confirmer le mot de passe *</label>
+                            <input type="password" class="form-control" name="confirm_password" 
+                                   placeholder="Retapez le mot de passe" required>
+                        </div>
+                        
+                        <button type="submit" class="btn btn-nc w-100 py-2 mb-3">
+                            <i class="bi bi-person-plus"></i> Créer mon compte
+                        </button>
+                        
+                        <div class="text-center">
+                            <p class="text-muted">
+                                Déjà inscrit ? 
+                                <a href="{{ url_for('auth.login') }}" style="color: var(--nc-primary); font-weight: 600;">
+                                    Se connecter
+                                </a>
+                            </p>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

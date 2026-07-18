@@ -1,0 +1,128 @@
+nigerconnect/
+│
+├── 📄 app.py                          # Point d'entrée principal
+├── 📄 config.py                       # Configuration (dev/prod)
+├── 📄 requirements.txt                # Dépendances Python
+├── 📄 init_db.py                      # Initialisation + données démo
+├── 📄 .env                            # Variables d'environnement
+├── 📄 .gitignore                      # Fichiers à ignorer (Git)
+├── 📄 README.md                       # Documentation projet
+│
+├── 📁 models/                         # Modèles de base de données
+│   ├── 📄 __init__.py                 # db, login_manager, bcrypt
+│   ├── 📄 user.py                     # Utilisateurs
+│   ├── 📄 annuaire.py                 # Annuaire + Avis
+│   ├── 📄 marketplace.py              # Annonces marché
+│   ├── 📄 service.py                  # Prestataires + Demandes
+│   ├── 📄 transport.py                # Trajets + Livraisons
+│   ├── 📄 payment.py                  # Transactions
+│   ├── 📄 health.py                   # Santé + RDV
+│   ├── 📄 job.py                      # Offres d'emploi
+│   ├── 📄 agriculture.py              # Prix marché + Annonces agri
+│   ├── 📄 admin_service.py            # Démarches administratives
+│   └── 📄 news.py                     # Actualités
+│
+├── 📁 routes/                         # Contrôleurs (Blueprints Flask)
+│   ├── 📄 __init__.py
+│   ├── 📄 auth.py                     # Inscription, connexion, profil
+│   ├── 📄 dashboard.py                # Tableau de bord
+│   ├── 📄 annuaire.py                 # Annuaire national
+│   ├── 📄 marketplace.py              # Marché numérique
+│   ├── 📄 services.py                 # Services à domicile
+│   ├── 📄 transport.py                # Transport & livraison
+│   ├── 📄 payments.py                 # Paiements mobile money
+│   ├── 📄 health.py                   # Santé & rendez-vous
+│   ├── 📄 jobs.py                     # Emploi & recrutement
+│   ├── 📄 agriculture.py              # Agriculture & prix
+│   ├── 📄 admin_services.py           # Administration
+│   ├── 📄 news.py                     # Actualités & alertes
+│   └── 📄 ai_assistant.py             # Assistant IA
+│
+├── 📁 templates/                      # Vues HTML (Jinja2)
+│   ├── 📄 base.html                   # Template parent (navbar, sidebar)
+│   ├── 📄 index.html                  # Page d'accueil publique
+│   │
+│   ├── 📁 auth/
+│   │   ├── 📄 connexion.html
+│   │   ├── 📄 inscription.html
+│   │   └── 📄 profil.html
+│   │
+│   ├── 📁 dashboard/
+│   │   └── 📄 index.html
+│   │
+│   ├── 📁 annuaire/
+│   │   ├── 📄 index.html
+│   │   ├── 📄 detail.html
+│   │   └── 📄 ajouter.html
+│   │
+│   ├── 📁 marketplace/
+│   │   ├── 📄 index.html
+│   │   ├── 📄 detail.html
+│   │   └── 📄 publier.html
+│   │
+│   ├── 📁 services/
+│   │   ├── 📄 index.html
+│   │   ├── 📄 detail.html
+│   │   └── 📄 inscription.html
+│   │
+│   ├── 📁 transport/
+│   │   ├── 📄 index.html
+│   │   ├── 📄 ajouter_trajet.html
+│   │   ├── 📄 livraison.html
+│   │   └── 📄 suivi.html
+│   │
+│   ├── 📁 payments/
+│   │   ├── 📄 index.html
+│   │   ├── 📄 mobile_money.html
+│   │   ├── 📄 facture.html
+│   │   └── 📄 historique.html
+│   │
+│   ├── 📁 health/
+│   │   ├── 📄 index.html
+│   │   ├── 📄 detail.html
+│   │   └── 📄 mes_rdv.html
+│   │
+│   ├── 📁 jobs/
+│   │   ├── 📄 index.html
+│   │   ├── 📄 detail.html
+│   │   └── 📄 publier.html
+│   │
+│   ├── 📁 agriculture/
+│   │   ├── 📄 index.html
+│   │   ├── 📄 prix.html
+│   │   ├── 📄 annonces.html
+│   │   └── 📄 publier.html
+│   │
+│   ├── 📁 admin_services/
+│   │   ├── 📄 index.html
+│   │   └── 📄 detail.html
+│   │
+│   ├── 📁 news/
+│   │   ├── 📄 index.html
+│   │   ├── 📄 detail.html
+│   │   └── 📄 publier.html
+│   │
+│   ├── 📁 ai/
+│   │   └── 📄 index.html
+│   │
+│   └── 📁 errors/
+│       ├── 📄 404.html
+│       └── 📄 500.html
+│
+├── 📁 static/                         # Fichiers statiques
+│   ├── 📁 css/
+│   │   └── 📄 custom.css              # CSS supplémentaire (optionnel)
+│   ├── 📁 js/
+│   │   └── 📄 main.js                 # JS supplémentaire (optionnel)
+│   ├── 📁 img/
+│   │   └── 📄 logo.png                # Logo NigerConnect
+│   └── 📁 uploads/                    # Fichiers uploadés par les users
+│       ├── 📁 annonces/
+│       ├── 📁 profils/
+│       └── 📁 etablissements/
+│
+└── 📁 utils/                          # Utilitaires
+    ├── 📄 __init__.py
+    ├── 📄 helpers.py                  # Fonctions utilitaires
+    ├── 📄 ai_engine.py                # Moteur IA local
+    └── 📄 sms_gateway.py              # Passerelle SMS

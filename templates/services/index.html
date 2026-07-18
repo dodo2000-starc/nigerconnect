@@ -1,0 +1,95 @@
+{% extends "base.html" %}
+{% block title %}Artisans & Services{% endblock %}
+{% block content %}
+<div class="search-container">
+    <h4 class="text-white fw-bold mb-3">
+        <i class="fas fa-tools me-2"></i>Services à domicile
+    </h4>
+    <form method="GET">
+        <div class="row g-2">
+            <div class="col-md-5">
+                <select class="form-select" name="type">
+                    <option value="">Tous les services</option>
+                    {% for t in types_service %}
+                    <option value="{{ t }}" {{ 'selected' if t == type_actif }}>{{ t }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="col-md-4">
+                <select class="form-select" name="ville">
+                    <option value="">Toutes les villes</option>
+                    {% for v in villes %}
+                    <option value="{{ v }}" {{ 'selected' if v == ville_active }}>{{ v }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="col-md-3">
+                <button type="submit" class="btn w-100"
+                        style="background:#e67e22;color:#fff;border-radius:10px;">
+                    <i class="fas fa-search me-1"></i>Rechercher
+                </button>
+            </div>
+        </div>
+    </form>
+</div>
+
+<div class="d-flex justify-content-between align-items-center mb-3">
+    <h5 class="fw-bold">{{ prestataires.total }} prestataire(s)</h5>
+    <a href="{{ url_for('services.inscription') }}" class="btn btn-nc-primary btn-sm">
+        <i class="fas fa-user-plus me-1"></i>Devenir prestataire
+    </a>
+</div>
+
+<div class="row g-3">
+    {% for p in prestataires.items %}
+    <div class="col-md-6 col-lg-4">
+        <div class="card p-3 h-100 prestataire-card">
+            <div class="d-flex align-items-center gap-3 mb-3">
+                <div style="width:50px;height:50px;background:#1a7a4a20;border-radius:50%;
+                            display:flex;align-items:center;justify-content:center;">
+                    <i class="fas fa-user" style="color:#1a7a4a;"></i>
+                </div>
+                <div>
+                    <div class="fw-bold">{{ p.user.nom_complet() }}</div>
+                    <span class="badge-nc-green">{{ p.service_type }}</span>
+                </div>
+                {% if p.est_verifie %}
+                <i class="fas fa-check-circle text-success ms-auto"
+                   title="Prestataire vérifié"></i>
+                {% endif %}
+            </div>
+            {% if p.specialites %}
+            <p class="text-muted small mb-2">{{ p.specialites }}</p>
+            {% endif %}
+            <div class="text-muted small mb-2">
+                <i class="fas fa-map-marker-alt me-1"></i>{{ p.ville }}
+                {% if p.experience_years > 0 %}
+                · {{ p.experience_years }} ans d'expérience
+                {% endif %}
+            </div>
+            <div class="note mb-3">
+                {% for i in range(5) %}
+                <i class="fas fa-star{{ '' if i < (p.note_moyenne|int) else '-o' }}"></i>
+                {% endfor %}
+                <span class="text-muted small">({{ p.nb_missions }} missions)</span>
+            </div>
+            {% if p.tarif_min %}
+            <div class="fw-bold mb-3" style="color:#1a7a4a;">
+                À partir de {{ p.tarif_min|int|prix_format }}
+            </div>
+            {% endif %}
+            <a href="{{ url_for('services.detail', id=p.id) }}"
+               class="btn btn-nc-primary btn-sm mt-auto">Contacter</a>
+        </div>
+    </div>
+    {% else %}
+    <div class="col-12 text-center py-5">
+        <i class="fas fa-tools fa-3x text-muted mb-3"></i>
+        <p class="text-muted">Aucun prestataire trouvé.</p>
+        <a href="{{ url_for('services.inscription') }}" class="btn btn-nc-primary">
+            Être le premier prestataire
+        </a>
+    </div>
+    {% endfor %}
+</div>
+{% endblock %}
